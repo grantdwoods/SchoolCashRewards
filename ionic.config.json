@@ -1,0 +1,7 @@
+{
+  "name": "SchoolCashRewards",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
