@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
+import { e } from '@angular/core/src/render3';
 
 const JWT = 'jwt';
 
@@ -30,9 +31,10 @@ export class AuthenticationService
     });
   }
 
-  isAuthenticated(){
+  isAuthenticated(): boolean{
     return this.authenticationState.value;
   }
+
   //ask the backend if the token is good
   checkToken(){
     return this.storage.get(JWT).then(res => {
