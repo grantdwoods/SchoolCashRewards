@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
-import { e } from '@angular/core/src/render3';
 import { Storage } from '@ionic/Storage'
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const JWT = 'jwt';
 
@@ -13,19 +13,31 @@ export class AuthenticationService
 {
   authenticationState = new BehaviorSubject(false);
   
-  constructor(private plt: Platform, private storage: Storage) { 
+  constructor(private plt: Platform, private storage: Storage, private http: HttpClient) { 
     this.plt.ready().then(()=> {
       this.checkToken();
     })
   }
 
-  login(){
-    return this.storage.set(JWT, 'sampletoken').then(res => {
-      this.authenticationState.next(true);
-    });
+  login(username: string, password:string){
+
+    var form = new FormData();
+    form.append('userID', username);
+    form.append('passWord', password);
+
+    this.http.post('http://localhost/SchoolCashRewards_php/sp_auth/log_in.php',form,{}).subscribe(
+      data =>{
+        console.log(data['jwt']);
+        this.storage.set(JWT, data['jwt']).then(res =>{
+           this.authenticationState.next(true);
+           });
+        },
+        error => {
+          console.log(error['error']['err-message']);
+        }
+      );
   }
 
-  //alternative promise syntax, if we dont need information returned. 
   logout(){
     return this.storage.remove(JWT).then(()=> {
       this.authenticationState.next(false);
@@ -36,12 +48,11 @@ export class AuthenticationService
     return this.authenticationState.value;
   }
 
-  //ask the backend if the token is good
   checkToken(){
-    return this.storage.get(JWT).then(res => {
-      if(res){
-        this.authenticationState.next(true);
-      }
-    });
+    // return this.storage.get(JWT).then(res => {
+    //   if(res){
+    //     this.authenticationState.next(true);
+    //   }
+    // });
   }
 }

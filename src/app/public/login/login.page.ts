@@ -11,6 +11,7 @@ export class LoginPage implements OnInit {
   private showForm: boolean;
   private username: string;
   private password: string;
+  jwt$: Object;
 
   constructor(private authService: AuthenticationService) { }
 
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
   login(){
     console.log(this.username + ' ' + this.password);
     console.log('Attempting log in....');
+    this.authService.login(this.username, this.password);
     
     //this.authService.login();
   }
