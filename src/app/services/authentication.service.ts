@@ -55,4 +55,7 @@ export class AuthenticationService
     //   }
     // });
   }
+  getToken(){
+    return this.storage.get(JWT);
+  }
 }

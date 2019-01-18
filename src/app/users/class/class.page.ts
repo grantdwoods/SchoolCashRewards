@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss'],
+  selector: 'app-class',
+  templateUrl: './class.page.html',
+  styleUrls: ['./class.page.scss'],
 })
-export class DashboardPage implements OnInit {
+export class ClassPage implements OnInit {
 
   constructor(private authService: AuthenticationService) { }
 
@@ -16,5 +16,4 @@ export class DashboardPage implements OnInit {
   logout(){
     this.authService.logout();
   }
-
 }

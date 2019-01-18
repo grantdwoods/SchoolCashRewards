@@ -30,8 +30,8 @@ export class AppComponent {
       this.authService.authenticationState.subscribe(state => {
         console.log('Auth State: ' + state);
         if(state){
-          console.log('going to user dashboard...');
-          this.router.navigate(['users', 'dashboard']);
+          console.log('going to class page...');
+          this.router.navigate(['users', 'class']);
         }
         else{
           console.log('going to log in page.');
