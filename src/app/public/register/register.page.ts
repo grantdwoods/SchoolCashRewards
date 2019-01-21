@@ -6,11 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-
-  constructor() { }
-
   private newSchool: boolean = false;
   private existingSchool: boolean = false;
+  
+  constructor() { }
 
   ngOnInit() {
     console.log("On register");

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InitialStylingFlags } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-existing-school',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExistingSchoolComponent implements OnInit {
 
+  private schoolID:number;
+  private password: string;
+  private role: string = "t";
+  private userID: string;
+
+
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }
