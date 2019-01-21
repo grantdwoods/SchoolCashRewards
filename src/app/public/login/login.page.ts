@@ -30,5 +30,8 @@ export class LoginPage implements OnInit {
     
     //this.authService.login();
   }
+  switchForms(){
+    
+  }
 
 }
