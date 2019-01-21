@@ -21,7 +21,5 @@ export class ClassComponent implements OnInit {
     .subscribe(students => {
       this.students$ = students;
       console.log(this.students$);}));
-    // this.classService.getStudentsInClass(this.authService.getToken())
-    // .subscribe(students => this.students$ = students);
   }
 }

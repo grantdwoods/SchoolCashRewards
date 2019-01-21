@@ -8,5 +8,23 @@
 </ion-header>
 
 <ion-content padding>
-
+<div *ngIf="!newSchool && !existingSchool">
+<p>I need to...</p>
+<ion-list>
+  <ion-item>
+      <ion-button (click)=showExistingSchoolForm()>
+        Register with an existing school
+          <ion-icon name="arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-item>
+  <ion-item>
+    <ion-button (click)=showNewSchoolForm()>
+      Register a new school
+        <ion-icon name="arrow-forward"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-list>
+</div>
+<app-new-school *ngIf="newSchool"></app-new-school>
+<app-existing-school *ngIf="existingSchool"></app-existing-school>
 </ion-content>

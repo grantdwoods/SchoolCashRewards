@@ -11,6 +11,7 @@ const JWT = 'jwt';
 })
 export class AuthenticationService 
 {
+  BASEURL = "http://localhost/SchoolCashRewards_php/";
   authenticationState = new BehaviorSubject(false);
   
   constructor(private plt: Platform, private storage: Storage, private http: HttpClient) { 
@@ -25,7 +26,7 @@ export class AuthenticationService
     form.append('userID', username);
     form.append('passWord', password);
 
-    this.http.post('http://localhost/SchoolCashRewards_php/sp_auth/log_in.php',form,{}).subscribe(
+    this.http.post(this.BASEURL + 'sp_auth/log_in.php',form,{}).subscribe(
       data =>{
         console.log(data['jwt']);
         this.storage.set(JWT, data['jwt']).then(res =>{
@@ -49,11 +50,11 @@ export class AuthenticationService
   }
 
   checkToken(){
-    // return this.storage.get(JWT).then(res => {
-    //   if(res){
-    //     this.authenticationState.next(true);
-    //   }
-    // });
+     return this.storage.get(JWT).then(res => {
+       if(res){
+         this.authenticationState.next(true);
+       }
+     });
   }
   getToken(){
     return this.storage.get(JWT);
