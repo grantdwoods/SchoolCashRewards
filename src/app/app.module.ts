@@ -11,11 +11,13 @@ import { IonicStorageModule } from '@ionic/Storage';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiBaseService } from './services/api-base-service';
+import { UserRoutingModule } from './users/user-routing.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(),
+     HttpClientModule, UserRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
