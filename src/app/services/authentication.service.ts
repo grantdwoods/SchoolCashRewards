@@ -13,6 +13,7 @@ export class AuthenticationService
 {
   BASEURL = "http://localhost/SchoolCashRewards_php/";
   authenticationState = new BehaviorSubject(false);
+  jwt = null;
   
   constructor(private plt: Platform, private storage: Storage, private http: HttpClient) { 
     this.plt.ready().then(()=> {
@@ -29,6 +30,7 @@ export class AuthenticationService
     this.http.post(this.BASEURL + 'sp_auth/log_in.php',form,{}).subscribe(
       data =>{
         console.log(data['jwt']);
+        this.jwt = data['jwt'];
         this.storage.set(JWT, data['jwt']).then(res =>{
            this.authenticationState.next(true);
            });
@@ -52,11 +54,13 @@ export class AuthenticationService
   checkToken(){
      return this.storage.get(JWT).then(res => {
        if(res){
+         this.jwt = res;
          this.authenticationState.next(true);
        }
      });
   }
+
   getToken(){
-    return this.storage.get(JWT);
+    return this.jwt;
   }
 }

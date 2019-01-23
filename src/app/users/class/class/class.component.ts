@@ -16,10 +16,9 @@ export class ClassComponent implements OnInit {
   private testing:boolean = this.authService.isAuthenticated();
   ngOnInit() 
   {
-    this.authService.getToken()
-    .then(jwt => this.classService.getStudentsInClass(jwt)
+    this.classService.getStudentsInClass(10)
     .subscribe(students => {
       this.students$ = students;
-      console.log(this.students$);}));
-  }
+      console.log(this.students$);});
+    }
 }
