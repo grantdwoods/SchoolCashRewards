@@ -9,9 +9,8 @@ export class ClassService {
   
   constructor(private http: HttpClient) { }
 
-  getStudentsInClass(JWT:string)
+  getStudentsInClass(classID: number)
   {   
-    return this.http.get("http://localhost/SchoolCashRewards_php/sp_app/takes.php?classID=10", 
-    {headers:{'jwt': JWT, "Content-Type":"application/json"}});
+    return this.http.get("takes.php?classID=" + classID);
   }
 }

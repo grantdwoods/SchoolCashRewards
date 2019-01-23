@@ -6,8 +6,6 @@ import { AuthenticationService } from './authentication.service';
   providedIn: 'root'
 })
 export class ApiBaseService implements HttpInterceptor{
-
-  JWT :string;
   baseUrl: string = "http://localhost/SchoolCashRewards_php/sp_app/";
   constructor(private authService :AuthenticationService) { }
 
@@ -16,14 +14,15 @@ export class ApiBaseService implements HttpInterceptor{
 
   intercept(req: HttpRequest<any>, next: HttpHandler)
   {
-
+    if(!this.authService.isAuthenticated()){
+      return next.handle(req);
+    }
     var newRequest;
-    // newRequest = req.clone({
-    //   headers: req.headers.set("jwt", "TESTING")
-    // });
-    
-    newRequest = req.clone();
-    console.log(newRequest);
+    var url = this.baseUrl + req.url;
+    newRequest = req.clone({
+      headers: req.headers.set("jwt", this.authService.getToken()),
+      url: url
+    });
     return next.handle(newRequest);
   }
 }
