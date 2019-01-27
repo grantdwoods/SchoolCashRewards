@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { InitialStylingFlags } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-existing-school',

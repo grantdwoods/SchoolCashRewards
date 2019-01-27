@@ -31,7 +31,7 @@ export class AppComponent {
         console.log('Auth State: ' + state);
         if(state){
           console.log('going to class page...');
-          this.router.navigate(['users', 'class']);
+          this.router.navigate(['user-tabs', 'class']);
         }
         else{
           console.log('going to log in page.');
