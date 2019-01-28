@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-tabs',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserTabsPage implements OnInit {
 
-  constructor() { }
+  title: string = 'Class';
+  constructor(private authService: AuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    //this.title = this.route.snapshot.paramMap.get('');
+  }
+
+  logout(){
+    this.authService.logout();
+  }
+
+  changeHeader(name: string)
+  {
+    this.title = name;
   }
 
 }

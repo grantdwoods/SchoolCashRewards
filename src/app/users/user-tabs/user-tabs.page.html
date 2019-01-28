@@ -1,17 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-router-outlet></ion-router-outlet>
+
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-   <ion-tab-button tab="catalog">
+   <ion-tab-button tab="catalog" (click)="changeHeader('Catalog')">
       <ion-icon name="flash"></ion-icon>
       <ion-label>Catalog</ion-label>
     </ion-tab-button>
 
-   <ion-tab-button tab="class">
+   <ion-tab-button tab="class" (click)="changeHeader('Class')">
       <ion-icon name="apps"></ion-icon>
       <ion-label>Class</ion-label>
     </ion-tab-button>
 
-   <ion-tab-button tab="student">
+   <ion-tab-button tab="student" (click)="changeHeader('Student')">
       <ion-icon name="send"></ion-icon>
       <ion-label>Student</ion-label>
     </ion-tab-button>
