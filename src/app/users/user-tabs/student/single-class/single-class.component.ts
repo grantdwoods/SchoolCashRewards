@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClassService } from '../../../../services/class.service';
 import { isNullOrUndefined } from 'util';
 
@@ -10,7 +10,7 @@ import { isNullOrUndefined } from 'util';
 })
 export class SingleClassComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private classService: ClassService) { }
+  constructor(private activatedRoute: ActivatedRoute, private classService: ClassService, private router: Router) { }
 
   id: number;
   students: Object = null;
@@ -24,6 +24,11 @@ export class SingleClassComponent implements OnInit {
         strStudentID: "Fake name"
       }];
     }
+  }
+
+  goToStudent(userID: string)
+  {
+    this.router.navigateByUrl('user-tabs/student/student-info/' + userID);
   }
 
 }

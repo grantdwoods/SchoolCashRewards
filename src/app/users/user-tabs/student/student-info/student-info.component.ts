@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { StudentService } from '../../../../services/student.service';
 
 @Component({
   selector: 'app-student-info',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudentInfoComponent implements OnInit {
 
-  constructor() { }
+  userID: string;
+  studentInfo: object = [];
+  constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService) { }
 
   ngOnInit() {
+    this.userID = this.activatedRoute.snapshot.paramMap.get('id');
+    this.studentService.getStudentInfo(this.userID).subscribe(studentInfo => (this.studentInfo = studentInfo));
   }
 
 }

@@ -2,7 +2,7 @@
   single-class works!
 </p>
 <ul>
-  <li *ngFor="let student of students">
+  <li *ngFor="let student of students" (click)="goToStudent( student.strStudentID )">
     {{ student.strStudentID }}
   </li>
 </ul>
