@@ -13,7 +13,7 @@ export class UserTabsPage implements OnInit {
   constructor(private authService: AuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    //this.title = this.route.snapshot.paramMap.get('');
+    
   }
 
   logout(){

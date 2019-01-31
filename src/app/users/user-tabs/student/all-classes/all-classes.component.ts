@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ClassService } from '../../../../services/class.service';
 
 @Component({
   selector: 'app-all-classes',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./all-classes.component.scss']
 })
 export class AllClassesComponent implements OnInit {
-
-  constructor() { }
+  classes: object;
+  constructor(private router: Router, private classService: ClassService) { }
 
   ngOnInit() {
+    this.classService.getClassesInSchool().subscribe(classes => (this.classes = classes));
+  }
+
+  goToClass(id: number)
+  {
+    this.router.navigateByUrl('student/single-class/' + id);
   }
 
 }

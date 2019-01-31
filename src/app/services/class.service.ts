@@ -13,4 +13,9 @@ export class ClassService {
   {   
     return this.http.get("takes.php?classID=" + classID);
   }
+
+  getClassesInSchool()
+  {
+    return this.http.get("classes.php");
+  }
 }

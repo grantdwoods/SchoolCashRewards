@@ -11,10 +11,25 @@ import { SingleClassComponent } from './single-class/single-class.component';
 import { StudentInfoComponent } from './student-info/student-info.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'all-classes', pathMatch: 'full'},
   {
     path: '',
-    component: StudentPage
-  }
+    component: StudentPage,
+    children: [
+      {
+        path: 'all-classes',
+        component: AllClassesComponent
+      },
+      {
+        path: 'single-class/:id',
+        component: SingleClassComponent
+      },
+      {
+        path: 'student-info/:id',
+        component: StudentInfoComponent
+      }
+    ]
+  },
 ];
 
 @NgModule({
@@ -22,7 +37,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   declarations: [StudentPage, AllClassesComponent, SingleClassComponent, StudentInfoComponent]
 })
