@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ClassService } from '../../../../services/class.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-single-class',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SingleClassComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private classService: ClassService) { }
+
+  id: number;
+  students: Object = null;
 
   ngOnInit() {
+    this.id = parseInt(this.activatedRoute.snapshot.paramMap.get("id"));
+    this.classService.getStudentsInClass(this.id).subscribe(students => (this.students = students));
+    if(isNullOrUndefined(this.students))
+    {
+      this.students = [{
+        strStudentID: "Fake name"
+      }];
+    }
   }
 
 }

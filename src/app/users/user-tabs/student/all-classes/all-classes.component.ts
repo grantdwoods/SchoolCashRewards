@@ -9,6 +9,7 @@ import { ClassService } from '../../../../services/class.service';
 })
 export class AllClassesComponent implements OnInit {
   classes: object;
+  students: object;
   constructor(private router: Router, private classService: ClassService) { }
 
   ngOnInit() {
@@ -17,7 +18,7 @@ export class AllClassesComponent implements OnInit {
 
   goToClass(id: number)
   {
-    this.router.navigateByUrl('student/single-class/' + id);
+    this.router.navigateByUrl('user-tabs/student/single-class/' + id);
   }
 
 }
