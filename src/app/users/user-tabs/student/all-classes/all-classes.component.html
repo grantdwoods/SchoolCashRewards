@@ -1,8 +1,12 @@
-<p>
-  all-classes works!
-</p>
-<ul>
-  <li *ngFor="let class of classes" (click)="goToClass( class.intClassID )">
-    {{ class.strClassName }}
-  </li>
-</ul>
+<ion-content padding>
+    <p>
+        all-classes works!
+    </p>
+    <ul>
+        <li *ngFor="let class of classes" (click)="goToClass( class.intClassID )">
+            {{ class.strClassName }}
+        </li>
+    </ul>
+</ion-content>
+
+
