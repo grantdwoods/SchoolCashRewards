@@ -13,7 +13,7 @@ export class AllClassesComponent implements OnInit {
   constructor(private router: Router, private classService: ClassService) { }
 
   ngOnInit() {
-    this.classService.getClassesInSchool().subscribe(classes => (this.classes = classes));
+      this.classService.getClassesInSchool().subscribe(classes => (this.classes = classes));
   }
 
   goToClass(id: number)
@@ -21,4 +21,15 @@ export class AllClassesComponent implements OnInit {
     this.router.navigateByUrl('user-tabs/student/single-class/' + id);
   }
 
-}
+    showAllStudentsInClass(classID: number)
+    {
+        this.classService.getStudentsInClass(classID).subscribe(students => (this.students = students));
+    }//end showAllStudentsInClass
+
+    showStudentList(classID: number)
+    {
+        this.classService.getStudentsInClass(classID).subscribe(students => (this.students = students));
+        console.log("Students " +classID + ": ");
+        console.log(this.students);
+    }
+}//end class

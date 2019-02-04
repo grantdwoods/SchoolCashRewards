@@ -1,10 +1,16 @@
 <ion-content padding>
     <p>
-      single-class works!
+        single-class works!
     </p>
-    <ul>
-      <li *ngFor="let student of students" (click)="goToStudent( student.strStudentID )">
-        {{ student.strStudentID }}
-      </li>
-    </ul>
+    <!--<ul>
+        <li *ngFor="let student of students" (click)="goToStudent( student.strStudentID )">
+            {{ student.strStudentID }}
+        </li>
+    </ul>-->
+    <ion-list>
+        <ion-list-header color="light">{{this.className}}</ion-list-header>
+        <ion-item *ngFor="let student of students" (click)="goToStudent( student.strStudentID )">
+            {{ student.strStudentID }}
+        </ion-item>
+    </ion-list>
 </ion-content>
