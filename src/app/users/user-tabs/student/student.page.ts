@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class StudentPage implements OnInit {
 
+  headerTitle = "Student";
   constructor(private router: Router) { }
 
   ngOnInit() {

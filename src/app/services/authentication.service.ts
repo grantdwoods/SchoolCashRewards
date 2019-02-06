@@ -11,7 +11,7 @@ const JWT = 'jwt';
 })
 export class AuthenticationService 
 {
-  BASEURL = "http://localhost:999/SchoolCashRewards_php/";
+  BASEURL = "http://localhost/SchoolCashRewards_php/";
   authenticationState = new BehaviorSubject(false);
   jwt = null;
   

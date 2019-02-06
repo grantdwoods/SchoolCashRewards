@@ -9,6 +9,7 @@ import { StudentPage } from './student.page';
 import { AllClassesComponent } from './all-classes/all-classes.component';
 import { SingleClassComponent } from './single-class/single-class.component';
 import { StudentInfoComponent } from './student-info/student-info.component';
+import { SharedComponentsModule } from '../../../shared-components/shared-components.module';
 
 const routes: Routes = [
   { path: '', redirectTo: 'all-classes', pathMatch: 'full'},
@@ -38,6 +39,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    SharedComponentsModule
   ],
   declarations: [StudentPage, AllClassesComponent, SingleClassComponent, StudentInfoComponent]
 })
