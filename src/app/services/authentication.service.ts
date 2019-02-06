@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/Storage'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -15,9 +15,11 @@ export class AuthenticationService
   authenticationState = new BehaviorSubject(false);
   jwt = null;
   
-  constructor(private plt: Platform, private storage: Storage, private http: HttpClient) { 
-    this.plt.ready().then(()=> {
-      this.checkToken();
+  constructor(private plt: Platform, private storage: Storage, 
+    private http: HttpClient, private toastContoller: ToastController){ 
+      
+      this.plt.ready().then(()=> {
+        this.checkToken();
     })
   }
 
@@ -35,8 +37,8 @@ export class AuthenticationService
            this.authenticationState.next(true);
            });
         },
-        error => {
-          console.log(error['error']['err-message']);
+        error =>{
+          this.presentToast(error['error']['err-message']);
         }
       );
   }
@@ -62,5 +64,15 @@ export class AuthenticationService
 
   getToken(){
     return this.jwt;
+  }
+
+  async presentToast(message:string){
+    const toast = await this.toastContoller.create({
+      message: message,
+      showCloseButton: false,
+      position: 'middle',
+      duration: 2000,
+      color: 'primary'});
+      toast.present();
   }
 }

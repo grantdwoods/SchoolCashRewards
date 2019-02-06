@@ -6,12 +6,31 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { StudentPage } from './student.page';
+import { AllClassesComponent } from './all-classes/all-classes.component';
+import { SingleClassComponent } from './single-class/single-class.component';
+import { StudentInfoComponent } from './student-info/student-info.component';
+import { SharedComponentsModule } from '../../../shared-components/shared-components.module';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'all-classes', pathMatch: 'full'},
   {
     path: '',
-    component: StudentPage
-  }
+    component: StudentPage,
+    children: [
+      {
+        path: 'all-classes',
+        component: AllClassesComponent
+      },
+      {
+        path: 'single-class/:id/:className',
+        component: SingleClassComponent
+      },
+      {
+        path: 'student-info/:id',
+        component: StudentInfoComponent
+      },
+    ]
+  },
 ];
 
 @NgModule({
@@ -19,8 +38,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedComponentsModule
   ],
-  declarations: [StudentPage]
+  declarations: [StudentPage, AllClassesComponent, SingleClassComponent, StudentInfoComponent]
 })
 export class StudentPageModule {}

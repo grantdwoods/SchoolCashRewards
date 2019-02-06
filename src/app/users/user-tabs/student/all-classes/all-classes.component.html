@@ -1,0 +1,12 @@
+<ion-content padding>
+    <ion-list *ngFor="let class of classes">
+        <ion-item (click)="goToClass(class.intClassID, class.strClassName)">
+            {{class.strClassName}}
+        </ion-item>
+    </ion-list>
+    <!--<span *ngFor="let class of classes">
+        <app-single-class [id]=class.intClassID [className]=class.strClassName></app-single-class>
+    </span>-->
+</ion-content>
+
+

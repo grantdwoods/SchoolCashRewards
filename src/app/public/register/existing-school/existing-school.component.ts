@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-existing-school',
@@ -7,16 +7,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExistingSchoolComponent implements OnInit {
 
+  @ViewChild('form', {read: ElementRef}) form;
+
   private schoolID:number;
   private password: string;
   private role: string = "t";
   private userID: string;
 
 
-  constructor() { }
+  constructor(private renderer: Renderer) { }
 
   ngOnInit() {
     
   }
 
+  ngAfterViewInit(){
+    setTimeout(()=>this.renderer.setElementStyle(this.form.nativeElement, 'opacity', '1'), 1000);
+    
+  }
 }

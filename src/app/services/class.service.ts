@@ -12,5 +12,10 @@ export class ClassService {
   getStudentsInClass(classID: number)
   {   
     return this.http.get("takes.php?classID=" + classID);
+  } 
+
+  getClassesInSchool()
+  {
+    return this.http.get("classes.php");
   }
 }

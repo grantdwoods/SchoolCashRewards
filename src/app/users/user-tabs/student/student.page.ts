@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-student',
@@ -8,12 +9,10 @@ import { AuthenticationService } from '../../../services/authentication.service'
 })
 export class StudentPage implements OnInit {
 
-  constructor(private authService: AuthenticationService) { }
+  headerTitle = "Student";
+  constructor(private router: Router) { }
 
   ngOnInit() {
-  }
-
-  logout(){
-    this.authService.logout();
+    //this.router.navigateByUrl('user-tabs/student/all-classes');
   }
 }
