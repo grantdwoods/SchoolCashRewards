@@ -5,6 +5,7 @@ import { Storage } from '@ionic/Storage'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const JWT = 'jwt';
+const ROLE = 'role';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthenticationService
   BASEURL = "http://localhost/SchoolCashRewards_php/";
   authenticationState = new BehaviorSubject(false);
   jwt = null;
-  
+  role : string;
   constructor(private plt: Platform, private storage: Storage, 
     private http: HttpClient, private toastContoller: ToastController){ 
       
@@ -31,10 +32,15 @@ export class AuthenticationService
 
     this.http.post(this.BASEURL + 'sp_auth/log_in.php',form,{}).subscribe(
       data =>{
-        console.log(data['jwt']);
         this.jwt = data['jwt'];
-        this.storage.set(JWT, data['jwt']).then(res =>{
-           this.authenticationState.next(true);
+        this.role = data['role'];
+
+        this.storage.set(JWT, data['jwt']).then(
+          ()=>{
+            this.storage.set(ROLE, data['role']).then(
+              ()=>{
+                this.authenticationState.next(true);
+              });
            });
         },
         error =>{
@@ -54,16 +60,26 @@ export class AuthenticationService
   }
 
   checkToken(){
-     return this.storage.get(JWT).then(res => {
+     return this.storage.get(JWT).then(res =>{
        if(res){
          this.jwt = res;
-         this.authenticationState.next(true);
+         this.storage.get(ROLE).then(
+          res =>{
+            if(res){
+              this.role = res;
+              this.authenticationState.next(true);
+            }  
+          });
        }
      });
   }
 
   getToken(){
     return this.jwt;
+  }
+
+  getRole(){
+    return this.role;
   }
 
   async presentToast(message:string){

@@ -8,9 +8,11 @@ import { AuthenticationService } from '../../../services/authentication.service'
 })
 export class ClassPage implements OnInit {
 
+  role: string;
   constructor(private authService: AuthenticationService) { }
 
   ngOnInit() {
+    this.role = this.authService.getRole();
   }
 
   logout(){
