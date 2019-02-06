@@ -22,13 +22,13 @@ const routes: Routes = [
         component: AllClassesComponent
       },
       {
-        path: 'single-class/:id',
+        path: 'single-class/:id/:className',
         component: SingleClassComponent
       },
       {
         path: 'student-info/:id',
         component: StudentInfoComponent
-      }
+      },
     ]
   },
 ];

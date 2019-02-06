@@ -15,21 +15,8 @@ export class AllClassesComponent implements OnInit {
   ngOnInit() {
       this.classService.getClassesInSchool().subscribe(classes => (this.classes = classes));
   }
-
-  goToClass(id: number)
+  goToClass(id: number, className: string)
   {
-    this.router.navigateByUrl('user-tabs/student/single-class/' + id);
+    this.router.navigateByUrl('user-tabs/student/single-class/' + id + "/" + className);
   }
-
-    showAllStudentsInClass(classID: number)
-    {
-        this.classService.getStudentsInClass(classID).subscribe(students => (this.students = students));
-    }//end showAllStudentsInClass
-
-    showStudentList(classID: number)
-    {
-        this.classService.getStudentsInClass(classID).subscribe(students => (this.students = students));
-        console.log("Students " +classID + ": ");
-        console.log(this.students);
-    }
 }//end class

@@ -11,21 +11,23 @@ export class SingleClassComponent implements OnInit
 {
   constructor(private activatedRoute: ActivatedRoute, private classService: ClassService, private router: Router) { }
 
-    @Input() id: number;
-    @Input() className: string;
-    students: Object = null;
+    id: number;
+    className: string;
+    students: Object;
 
     ngOnInit()
     {
-        this.classService.getStudentsInClass(this.id).subscribe(
-          students =>
-          {
-            this.students = students;
-          }, 
-          error => 
-          {
-            console.log(error["error"]["err-message"]);
-          });
+      this.id = parseInt(this.activatedRoute.snapshot.paramMap.get("id"));
+      this.className = this.activatedRoute.snapshot.paramMap.get('className');
+
+      this.classService.getStudentsInClass(this.id).subscribe(
+        students => {
+          this.students = students;
+          console.log(students);
+        },
+        error => {
+          console.log(error["error"]["err-message"]);
+        });
     }
 
     goToStudent(userID: string)

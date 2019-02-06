@@ -15,7 +15,14 @@ export class StudentInfoComponent implements OnInit {
 
   ngOnInit() {
     this.userID = this.activatedRoute.snapshot.paramMap.get('id');
-    this.studentService.getStudentInfo(this.userID).subscribe(studentInfo => (this.studentInfo = studentInfo));
+
+    this.studentService.getStudentInfo(this.userID).subscribe(
+      studentInfo =>{
+        this.studentInfo = studentInfo;
+      },
+      error => {
+        console.log(error["error"]["err-message"]);
+      });
   }
 
 }

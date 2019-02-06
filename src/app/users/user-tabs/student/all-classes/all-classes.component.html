@@ -1,16 +1,12 @@
 <ion-content padding>
-    <!--<ion-list>
-        <ion-item *ngFor="let class of classes" (click)="showStudentList(class.intClassID)">
-            {{ class.strClassName }}
-            {{class.intClassID}}
+    <ion-list *ngFor="let class of classes">
+        <ion-item (click)="goToClass(class.intClassID, class.strClassName)">
+            {{class.strClassName}}
         </ion-item>
-        <!--<ion-item *ngFor="let class of classes" (click)="goToClass( class.intClassID )">
-            {{ class.strClassName }}
-        </ion-item>
-    </ion-list>-->
-    <span *ngFor="let class of classes">
+    </ion-list>
+    <!--<span *ngFor="let class of classes">
         <app-single-class [id]=class.intClassID [className]=class.strClassName></app-single-class>
-    </span>
+    </span>-->
 </ion-content>
 
 
