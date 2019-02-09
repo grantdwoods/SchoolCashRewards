@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StudentService } from '../../../../services/student.service';
+import { ModalController } from '@ionic/angular';
+import { AwardModalPage } from './award-modal/award-modal.page';
 
 @Component({
   selector: 'app-student-info',
@@ -10,8 +12,8 @@ import { StudentService } from '../../../../services/student.service';
 export class StudentInfoComponent implements OnInit {
 
   userID: string;
-  studentInfo: object = [];
-  constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService) { }
+    studentInfo: object = [];
+    constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController) { }
 
     ngOnInit()
     {
@@ -26,8 +28,16 @@ export class StudentInfoComponent implements OnInit {
             });
     }//end ngOnInit
 
-    awardCoupons()
+    async awardCoupons()
     {
+        const modal = await this.modalController.create({
+            component: AwardModalPage,
+            componentProps: {currentCoupons: this.studentInfo[0].intCoupons}
+        });
         console.log("Awarding coupons to " + this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName +" ("+this.studentInfo[0].intCoupons+")");
+        return await modal.present();
+
+        //refresh the page to show that the student has the transaction applied
+
     }//end awardCoupons
 }//end class
