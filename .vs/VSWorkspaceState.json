@@ -3,9 +3,17 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\public",
+    "\\src\\app\\public\\login",
+    "\\src\\app\\services",
+    "\\src\\app\\shared-components",
+    "\\src\\app\\shared-components\\main-header",
     "\\src\\app\\users",
     "\\src\\app\\users\\user-tabs",
-    "\\src\\app\\users\\user-tabs\\class"
+    "\\src\\app\\users\\user-tabs\\student",
+    "\\src\\app\\users\\user-tabs\\student\\student-info",
+    "\\src\\app\\users\\user-tabs\\student\\student-info\\award-modal"
   ],
+  "SelectedNode": "\\src\\app\\users\\user-tabs\\student\\student-info\\award-modal\\award-modal.page.ts",
   "PreviewInSolutionExplorer": false
 }
