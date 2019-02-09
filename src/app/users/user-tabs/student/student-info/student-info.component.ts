@@ -13,16 +13,21 @@ export class StudentInfoComponent implements OnInit {
   studentInfo: object = [];
   constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService) { }
 
-  ngOnInit() {
-    this.userID = this.activatedRoute.snapshot.paramMap.get('id');
+    ngOnInit()
+    {
+        this.userID = this.activatedRoute.snapshot.paramMap.get('id');
 
-    this.studentService.getStudentInfo(this.userID).subscribe(
-      studentInfo =>{
-        this.studentInfo = studentInfo;
-      },
-      error => {
-        console.log(error["error"]["err-message"]);
-      });
-  }
+        this.studentService.getStudentInfo(this.userID).subscribe(
+            studentInfo =>{
+                this.studentInfo = studentInfo;
+            },
+                error => {
+                console.log(error["error"]["err-message"]);
+            });
+    }//end ngOnInit
 
-}
+    awardCoupons()
+    {
+        console.log("Awarding coupons to " + this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName +" ("+this.studentInfo[0].intCoupons+")");
+    }//end awardCoupons
+}//end class
