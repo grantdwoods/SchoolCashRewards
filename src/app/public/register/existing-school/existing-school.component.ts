@@ -1,5 +1,7 @@
 import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
 @Component({
   selector: 'app-existing-school',
@@ -8,7 +10,7 @@ import { NgForm } from '@angular/forms';
 })
 export class ExistingSchoolComponent implements OnInit {
 
-  @ViewChild('form', {read: ElementRef}) form;
+  @ViewChild('regForm', {read: ElementRef}) regForm;
   @ViewChild('confirm', {read: ElementRef}) confirmView;
 
   // private schoolID:number;
@@ -17,32 +19,51 @@ export class ExistingSchoolComponent implements OnInit {
   // private userID: string;
   // private confirmPass: string;
   private passwordsMatch: boolean = false;
-  formData = {};
+  private formGroup: FormGroup;
 
-  constructor(private renderer: Renderer) { }
+ 
+
+  constructor(private renderer: Renderer, private authService: AuthenticationService, private formBuilder:FormBuilder) {}
 
   ngOnInit() {
-    
+    this.formGroup = this.formBuilder.group({
+      schoolID: ['', Validators.compose([Validators.required, Validators.pattern("[0-9]*")])],
+      userID: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPass:['', Validators.required],
+      role: []
+    },{
+        validator: this.MustMatch('password', 'confirmPass')
+      }
+    );
   }
 
   ngAfterViewInit(){
-    setTimeout(()=>this.renderer.setElementStyle(this.form.nativeElement, 'opacity', '1'), 1000);
-  }
-
-  compareInput(){
-    if(this.formData['password'] == this.formData['confirmPass']){
-      console.log('match');
-      this.renderer.setElementStyle(this.confirmView.nativeElement, 'color', 'black');
-      this.passwordsMatch = true;
-    }
-    else{
-      console.log('no match');
-      this.renderer.setElementStyle(this.confirmView.nativeElement, 'color', 'red');
-      this.passwordsMatch = false;
-    }
+    setTimeout(()=>this.renderer.setElementStyle(this.regForm.nativeElement, 'opacity', '1'), 1000);
   }
 
   onSubmit() {
-    console.log(this.formData);
+    
+    this.formGroup.controls.role.setValue('t');
+    console.log(this.formGroup.value);
   }
+
+  MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+        const control = formGroup.controls[controlName];
+        const matchingControl = formGroup.controls[matchingControlName];
+
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+            // return if another validator has already found an error on the matchingControl
+            return;
+        }
+
+        // set error on matchingControl if validation fails
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ mustMatch: true });
+        } else {
+            matchingControl.setErrors(null);
+        }
+    }
+}
 }
