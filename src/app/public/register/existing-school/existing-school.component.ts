@@ -1,4 +1,5 @@
 import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-existing-school',
@@ -10,12 +11,13 @@ export class ExistingSchoolComponent implements OnInit {
   @ViewChild('form', {read: ElementRef}) form;
   @ViewChild('confirm', {read: ElementRef}) confirmView;
 
-  private schoolID:number;
-  private password: string;
-  private role: string = "t";
-  private userID: string;
-  private confirmPass: string;
-
+  // private schoolID:number;
+  // private password: string;
+  // private role: string = "t";
+  // private userID: string;
+  // private confirmPass: string;
+  private passwordsMatch: boolean = false;
+  formData = {};
 
   constructor(private renderer: Renderer) { }
 
@@ -28,11 +30,19 @@ export class ExistingSchoolComponent implements OnInit {
   }
 
   compareInput(){
-    if(this.password == this.confirmPass){
-      //this.renderer.setElementStyle(this.confirmView.nativeElement, 'background-color', 'white');
+    if(this.formData['password'] == this.formData['confirmPass']){
+      console.log('match');
+      this.renderer.setElementStyle(this.confirmView.nativeElement, 'color', 'black');
+      this.passwordsMatch = true;
     }
     else{
-      //this.renderer.setElementStyle(this.confirmView.nativeElement, 'background-color', 'white');
+      console.log('no match');
+      this.renderer.setElementStyle(this.confirmView.nativeElement, 'color', 'red');
+      this.passwordsMatch = false;
     }
+  }
+
+  onSubmit() {
+    console.log(this.formData);
   }
 }

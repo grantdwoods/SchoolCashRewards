@@ -10,13 +10,13 @@
 <ion-content padding>
 <ion-list #choice *ngIf="!hideRegisterSchool">
     <p>I need to...</p>
-  <ion-item>
+  <ion-item lines="none">
       <ion-button (click)=showExistingSchoolForm()>
         Register with an existing school
           <ion-icon name="arrow-forward"></ion-icon>
       </ion-button>
     </ion-item>
-  <ion-item>
+  <ion-item lines="none">
     <ion-button (click)=showNewSchoolForm()>
       Register a new school
         <ion-icon name="arrow-forward"></ion-icon>

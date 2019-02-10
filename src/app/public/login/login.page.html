@@ -7,11 +7,11 @@
 <ion-content padding>
   
   <ion-list *ngIf="!showForm">
-    <ion-item>  
+    <ion-item lines="none">  
       <ion-button (click) = "toggleForm()">Login</ion-button>
     </ion-item>
     <!--Router will resolve path in the background. Direction is for an animation. -->
-    <ion-item>        
+    <ion-item lines="none">        
       <ion-button color="secondary" routerLink="/register" routerDirection="forward">Register</ion-button>
     </ion-item>
   </ion-list>      
@@ -28,7 +28,7 @@
     </ion-item>
     <ion-button (click) = "login()">Login</ion-button>
   </ion-list>
-  <ion-item routerLink="/register" routerDirection="forward" no-lines><a>Need to register a new account?</a></ion-item>
+  <ion-item routerLink="/register" routerDirection="forward" lines="none"><a>Need to register a new account?</a></ion-item>
 </div>
 
 </ion-content>

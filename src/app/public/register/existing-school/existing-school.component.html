@@ -1,18 +1,20 @@
-<div #form>
+
+<form #form (ngSubmit)="onSubmit()">
     <ion-item>
         <ion-label color="secondary" fixed>School code:</ion-label>
-        <ion-input [(ngModel)] ='schoolID' placeholder="School code"></ion-input>
+        <ion-input [(ngModel)] ='formData.schoolID' placeholder="School code" name="schoolID" ngModel required></ion-input>
     </ion-item>
     <ion-item>
         <ion-label color="primary" fixed>Username:</ion-label>
-        <ion-input [(ngModel)] ='userID' placeholder="Username"></ion-input>
+        <ion-input [(ngModel)] ='formData.userID' placeholder="Username" name="userID" ngModel required></ion-input>
     </ion-item>
     <ion-item>
         <ion-label color="secondary" fixed>Password:</ion-label>
-        <ion-input [(ngModel)] ='password' placeholder="Password"></ion-input>
+        <ion-input type="password" [(ngModel)] ='formData.password' placeholder="Password" (keyup)="compareInput()" name="password"  ngModel required></ion-input>
     </ion-item>
     <ion-item #confirm>
         <ion-label color="secondary" fixed>Confirm Password:</ion-label>
-        <ion-input [(ngModel)] ='confirmPass' placeholder="Password" (keypress)="compareInput()"></ion-input>
+        <ion-input type="password" [(ngModel)] ='formData.confirmPass' placeholder="Password" (keyup)="compareInput()" name="confirmPass" ngModel required></ion-input>
     </ion-item>
-</div>
+    <ion-button type="submit" [disabled]="!passwordsMatch">Submit</ion-button>
+</form>
