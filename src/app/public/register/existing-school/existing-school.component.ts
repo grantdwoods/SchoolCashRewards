@@ -8,11 +8,13 @@ import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/cor
 export class ExistingSchoolComponent implements OnInit {
 
   @ViewChild('form', {read: ElementRef}) form;
+  @ViewChild('confirm', {read: ElementRef}) confirmView;
 
   private schoolID:number;
   private password: string;
   private role: string = "t";
   private userID: string;
+  private confirmPass: string;
 
 
   constructor(private renderer: Renderer) { }
@@ -23,6 +25,14 @@ export class ExistingSchoolComponent implements OnInit {
 
   ngAfterViewInit(){
     setTimeout(()=>this.renderer.setElementStyle(this.form.nativeElement, 'opacity', '1'), 1000);
-    
+  }
+
+  compareInput(){
+    if(this.password == this.confirmPass){
+      //this.renderer.setElementStyle(this.confirmView.nativeElement, 'background-color', 'white');
+    }
+    else{
+      //this.renderer.setElementStyle(this.confirmView.nativeElement, 'background-color', 'white');
+    }
   }
 }
