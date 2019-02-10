@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/cor
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { RegistrationService } from '../../../services/registration.service';
 
 @Component({
   selector: 'app-existing-school',
@@ -23,15 +24,14 @@ export class ExistingSchoolComponent implements OnInit {
 
  
 
-  constructor(private renderer: Renderer, private authService: AuthenticationService, private formBuilder:FormBuilder) {}
+  constructor(private renderer: Renderer, private registrationService: RegistrationService, private formBuilder:FormBuilder) {}
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       schoolID: ['', Validators.compose([Validators.required, Validators.pattern("[0-9]*")])],
       userID: ['', Validators.required],
       password: ['', Validators.required],
-      confirmPass:['', Validators.required],
-      role: []
+      confirmPass:['', Validators.required]
     },{
         validator: this.MustMatch('password', 'confirmPass')
       }
@@ -43,9 +43,13 @@ export class ExistingSchoolComponent implements OnInit {
   }
 
   onSubmit() {
-    
-    this.formGroup.controls.role.setValue('t');
-    console.log(this.formGroup.value);
+    this.registrationService.registerAccount(this.formGroup).subscribe(
+      data =>{
+        console.log(data);
+      }, 
+      error =>{
+        console.log(error);
+      });
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
@@ -57,7 +61,6 @@ export class ExistingSchoolComponent implements OnInit {
             // return if another validator has already found an error on the matchingControl
             return;
         }
-
         // set error on matchingControl if validation fails
         if (control.value !== matchingControl.value) {
             matchingControl.setErrors({ mustMatch: true });

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/Storage'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 
 const JWT = 'jwt';
 const ROLE = 'role';
@@ -12,7 +12,7 @@ const ROLE = 'role';
 })
 export class AuthenticationService 
 {
-  BASEURL = "http://localhost/SchoolCashRewards_php/";
+  BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
   authenticationState = new BehaviorSubject(false);
   jwt = null;
   role : string;
@@ -30,7 +30,7 @@ export class AuthenticationService
     form.append('userID', username);
     form.append('passWord', password);
 
-    this.http.post(this.BASEURL + 'sp_auth/log_in.php',form,{}).subscribe(
+    this.http.post(this.BASEURL + 'log_in.php',form,{}).subscribe(
       data =>{
         this.jwt = data['jwt'];
         this.role = data['role'];
