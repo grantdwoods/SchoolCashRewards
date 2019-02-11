@@ -1,8 +1,7 @@
 import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../../services/authentication.service';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../services/registration.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-existing-school',
@@ -12,19 +11,12 @@ import { RegistrationService } from '../../../services/registration.service';
 export class ExistingSchoolComponent implements OnInit {
 
   @ViewChild('regForm', {read: ElementRef}) regForm;
-  @ViewChild('confirm', {read: ElementRef}) confirmView;
 
-  // private schoolID:number;
-  // private password: string;
-  // private role: string = "t";
-  // private userID: string;
-  // private confirmPass: string;
   private passwordsMatch: boolean = false;
   private formGroup: FormGroup;
 
- 
-
-  constructor(private renderer: Renderer, private registrationService: RegistrationService, private formBuilder:FormBuilder) {}
+  constructor(private renderer: Renderer, private registrationService: RegistrationService, 
+    private formBuilder:FormBuilder,  private toastContoller: ToastController) {}
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -45,10 +37,12 @@ export class ExistingSchoolComponent implements OnInit {
   onSubmit() {
     this.registrationService.registerAccount(this.formGroup).subscribe(
       data =>{
-        console.log(data);
+        //goto next component, initialize app DB.
+        console.log("we did it.");
       }, 
       error =>{
-        console.log(error);
+        this.presentToast(error['error']['err-message']);
+        this.formGroup.controls.userID.setValue("");
       });
   }
 
@@ -68,5 +62,15 @@ export class ExistingSchoolComponent implements OnInit {
             matchingControl.setErrors(null);
         }
     }
-}
+  }
+  
+  async presentToast(message:string){
+    const toast = await this.toastContoller.create({
+      message: message,
+      showCloseButton: false,
+      position: 'middle',
+      duration: 2000,
+      color: 'primary'});
+      toast.present();
+  }
 }
