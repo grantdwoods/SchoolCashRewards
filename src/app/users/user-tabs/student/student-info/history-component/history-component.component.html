@@ -1,0 +1,19 @@
+<p>
+  history-component works!
+</p>
+<ion-list>
+    <ion-item *ngFor="let history of historyInfo" (click)="openModalView()">
+        <p>
+            {{history.dtmDate}}
+        </p>
+        <p>
+            <!--this should somehow be replaced with the teacher's name rather than ID-->
+            {{history.strTeacherID}}
+            <br />
+            {{history.strComment}}
+        </p>
+        <p>
+            {{history.intAmount}}
+        </p>
+    </ion-item>
+</ion-list>
