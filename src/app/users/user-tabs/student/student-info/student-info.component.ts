@@ -98,13 +98,18 @@ export class StudentInfoComponent implements OnInit {
             ],
         });//end alert creation
         await alert.present();
+        //refresh the page when the alert is dismissed
+        await alert.onDidDismiss().then(() => {
+            //refresh the page
+            //this.refreshPage();
+        });
     }//end awardCouponsWithAlert
 
     private handleAward(award: number, description: string)
     {
         var balance = this.studentInfo[0].intCoupons + award;
         //update the student's coupon count
-        this.updateBalance(balance);
+        this.updateBalance(award);
         //add transaction to award history
         this.logTransaction(award, description);
         //toast
@@ -114,7 +119,7 @@ export class StudentInfoComponent implements OnInit {
         //refresh page to show transaction has occured
     }//end handleAward
 
-    private updateBalance(newBalance: number)
+    private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
     }//end updateBalance
@@ -136,4 +141,13 @@ export class StudentInfoComponent implements OnInit {
         });
         toast.present();
     }//end displayToast
+
+    private refreshPage(event)
+    {
+        console.log("refreshing page");
+        setTimeout(() => {
+            console.log("refresh has ended");
+            event.target.complete();
+        }, 2000);
+    }//end refreshPage
 }//end class

@@ -1,4 +1,10 @@
 <ion-content padding>
+    <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+        <ion-refresher-content
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
     <div *ngFor="let student of studentInfo">
         <h3>{{ student.strFirstName }} {{student.strLastName}}</h3>
         <h3>{{ student.intCoupons }}</h3>

@@ -19,13 +19,13 @@ export class StudentService {
         return this.httpClient.get('history.php?userID=' + userID);
     }//end getStudentHistory
 
-    addStudentHistoryItem(userID: string, amount: number, comment: string, dateTime: string)
+    postStudentHistoryItem(userID: string, amount: number, comment: string, dateTime: string)
     {
         //calls the httpClient to add this transaction to the student
-        //return this.httpClient.
+        //return this.httpClient.post('history.php ');
     }//end addStudentHistoryItem
 
-    addAward(userID: string, coupons: number)
+    putStudentAward(userID: string, coupons: number)
     {
         //calls the httpClient to apply the award to the proper student
         //return this.httpClient.put('students.php?userID=' + userID + '&coupons=' + coupons);
