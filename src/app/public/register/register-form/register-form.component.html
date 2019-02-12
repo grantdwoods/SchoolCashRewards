@@ -1,5 +1,16 @@
+<form #schoolForm [formGroup]="schoolInfo" (ngSubmit)="onSchoolSubmit()" *ngIf="newSchool">
+    <ion-item>
+        <ion-label color="primary" fixed>School name:</ion-label>
+        <ion-input placeholder="School title" formControlName="schoolName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>School Cash:</ion-label>
+        <ion-input type="text" placeholder="Cash name" formControlName="schoolCashName"></ion-input>
+    </ion-item>
+    <ion-button type="submit" [disabled]="!schoolInfo.valid">Submit</ion-button>
+</form>
 
-<form #regForm [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<form #userForm [formGroup]="userInfo" (ngSubmit)="onUserSubmit()">
     <ion-item>
         <ion-label color="secondary" fixed>School code:</ion-label>
         <ion-input placeholder="School code" formControlName="schoolID"></ion-input>
@@ -16,5 +27,5 @@
         <ion-label color="secondary" fixed>Confirm Password:</ion-label>
         <ion-input type="password" placeholder="Password" formControlName="confirmPass"></ion-input>
     </ion-item>
-    <ion-button type="submit" [disabled]="!formGroup.valid">Submit</ion-button>
+    <ion-button type="submit" [disabled]="!userInfo.valid">Submit</ion-button>
 </form>

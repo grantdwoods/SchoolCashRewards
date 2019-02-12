@@ -23,6 +23,5 @@
     </ion-button>
   </ion-item>
 </ion-list>
-<app-new-school #registerSchoolForm *ngIf="newSchool"></app-new-school>
-<app-existing-school #registerUserForm *ngIf="existingSchool"></app-existing-school>
+<register-form #registerUserForm *ngIf="buttonClicked" [newSchool] = "newSchool" ></register-form>
 </ion-content>
