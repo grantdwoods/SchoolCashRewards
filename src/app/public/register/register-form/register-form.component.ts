@@ -12,10 +12,12 @@ export class RegisterFormComponent implements OnInit {
 
   @ViewChild('schoolForm', {read: ElementRef}) schoolForm;
   @ViewChild('userForm', {read: ElementRef}) userForm;
+  @ViewChild('progress', {read: ElementRef}) initProgress;
   @Input() newSchool:boolean;
 
   private schoolInfo: FormGroup;
   private userInfo: FormGroup;
+  private initAppDb: boolean;
 
   constructor(private renderer: Renderer, private registrationService: RegistrationService, 
     private formBuilder:FormBuilder,  private toastContoller: ToastController) {}
@@ -48,12 +50,20 @@ export class RegisterFormComponent implements OnInit {
 
   }
 
+  randomIntFromInterval(min,max) // min and max included
+  {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
   onUserSubmit() {
     this.registrationService.registerAccount(this.userInfo, 0).subscribe(
       data =>{
         //goto next component, initialize app DB.
         console.log("we did it.");
         setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
+        this.initAppDb = true;
+        setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
+        
       }, 
       error =>{
         if(error['status'] == 409){

@@ -21,4 +21,5 @@ export class RegistrationService {
 
     return this.http.post(this.authService.BASEURL + 'registerUser.php',formData,{})
    }
+   
 }
