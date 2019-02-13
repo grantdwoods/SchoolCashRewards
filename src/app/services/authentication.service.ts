@@ -24,7 +24,11 @@ export class AuthenticationService
     })
   }
 
-  login(username: string, password:string){
+  setAuthenticationState(authState:boolean){
+    this.authenticationState.next(authState);
+  }
+
+  login(username: string, password:string, setAuthSate: boolean){
 
     var form = new FormData();
     form.append('userID', username);
@@ -39,7 +43,9 @@ export class AuthenticationService
           ()=>{
             this.storage.set(ROLE, data['role']).then(
               ()=>{
-                this.authenticationState.next(true);
+                if(setAuthSate){
+                  this.setAuthenticationState(true);
+                }
               });
            });
         },
@@ -50,8 +56,12 @@ export class AuthenticationService
   }
 
   logout(){
-    return this.storage.remove(JWT).then(()=> {
-      this.authenticationState.next(false);
+    return this.storage.remove(JWT).then(
+      ()=>{
+        this.storage.remove(ROLE).then(
+          () =>{
+            this.authenticationState.next(false);
+          });
     });
   }
 

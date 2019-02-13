@@ -12,8 +12,16 @@
 
 <form #userForm [formGroup]="userInfo" (ngSubmit)="onUserSubmit()">
     <ion-item>
-        <ion-label color="secondary" fixed>School code:</ion-label>
+        <ion-label color="secondary" fixed>School Code:</ion-label>
         <ion-input placeholder="School code" formControlName="schoolID"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>First Name:</ion-label>
+        <ion-input placeholder="First name" formControlName="firstName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>Last Name:</ion-label>
+        <ion-input placeholder="Last name" formControlName="lastName"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label color="primary" fixed>Username:</ion-label>
