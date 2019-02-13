@@ -28,31 +28,28 @@ export class AuthenticationService
     this.authenticationState.next(authState);
   }
 
-  login(username: string, password:string, setAuthSate: boolean){
+  async login(username: string, password:string, setAuthSate: boolean){
 
     var form = new FormData();
     form.append('userID', username);
     form.append('passWord', password);
+    
+    try{
+      var data = await this.http.post(this.BASEURL + 'log_in.php',form,{}).toPromise();
+      
+      this.role = data['role'];
+      this.jwt = data['jwt'];
 
-    this.http.post(this.BASEURL + 'log_in.php',form,{}).subscribe(
-      data =>{
-        this.jwt = data['jwt'];
-        this.role = data['role'];
+      await this.storage.set(JWT, data['jwt']);
+      await this.storage.set(ROLE, data['role']);
 
-        this.storage.set(JWT, data['jwt']).then(
-          ()=>{
-            this.storage.set(ROLE, data['role']).then(
-              ()=>{
-                if(setAuthSate){
-                  this.setAuthenticationState(true);
-                }
-              });
-           });
-        },
-        error =>{
-          this.presentToast(error['error']['err-message']);
-        }
-      );
+      if(setAuthSate){
+        this.setAuthenticationState(true);
+      }
+    }
+    catch(error){
+      this.presentToast(error['error']['err-message']);
+    }
   }
 
   logout(){
