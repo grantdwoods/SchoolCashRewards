@@ -1,7 +1,9 @@
-import { Component, OnInit, Renderer, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ElementRef, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../services/registration.service';
 import { ToastController } from '@ionic/angular';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { userInfo } from 'os';
 
 @Component({
   selector: 'register-form',
@@ -14,13 +16,14 @@ export class RegisterFormComponent implements OnInit {
   @ViewChild('userForm', {read: ElementRef}) userForm;
   @ViewChild('progress', {read: ElementRef}) initProgress;
   @Input() newSchool:boolean;
+  @Output() initAppDb: boolean;
 
   private schoolInfo: FormGroup;
   private userInfo: FormGroup;
-  private initAppDb: boolean;
+  
 
   constructor(private renderer: Renderer, private registrationService: RegistrationService, 
-    private formBuilder:FormBuilder,  private toastContoller: ToastController) {}
+    private formBuilder:FormBuilder,  private toastContoller: ToastController, private authService: AuthenticationService) {}
 
   ngOnInit() {
     console.log(this.newSchool);
@@ -28,7 +31,9 @@ export class RegisterFormComponent implements OnInit {
       schoolID: ['', Validators.compose([Validators.required, Validators.pattern("[0-9]*")])],
       userID: ['', Validators.required],
       password: ['', Validators.required],
-      confirmPass:['', Validators.required]
+      confirmPass:['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
     },{
         validator: this.MustMatch('password', 'confirmPass')
       }
@@ -38,6 +43,7 @@ export class RegisterFormComponent implements OnInit {
       schoolName: ['',Validators.required], 
       schoolCashName:['', Validators.required]
     });
+    
   }
 
   ngAfterViewInit(){
@@ -63,7 +69,7 @@ export class RegisterFormComponent implements OnInit {
         setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
         this.initAppDb = true;
         setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
-        
+        this.getJwtFromServer();
       }, 
       error =>{
         if(error['status'] == 409){
@@ -74,6 +80,12 @@ export class RegisterFormComponent implements OnInit {
         }
         this.presentToast(error['error']['err-message']);
       });
+  }
+
+  getJwtFromServer(){
+    var username =  this.userInfo.controls.userID.value;
+    var password = this.userInfo.controls.password.value;
+    this.authService.login(username, password, false);
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
