@@ -24,8 +24,6 @@ export class LoginPage implements OnInit {
   }
   
   login(){
-    console.log(this.username + ' ' + this.password);
-    console.log('Attempting log in....');
     this.authService.login(this.username, this.password, true);
   }
 

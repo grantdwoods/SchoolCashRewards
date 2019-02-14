@@ -13,7 +13,7 @@ const ROLE = 'role';
 })
 export class AuthenticationService 
 {
-  BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
+  BASEURL = "https://grantwoodscs.com/schoolCashRewards/sp_auth/";
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
@@ -42,11 +42,8 @@ export class AuthenticationService
       
       this.role = data['role'];
       this.jwt = data['jwt'];
-
-      await this.storage.set(JWT, data['jwt']);
-      await this.storage.set(ROLE, data['role']);
       this.storageState.next(true);
-
+      
       if(setAuthSate){
         this.setAuthenticationState(true);
       }
@@ -58,8 +55,6 @@ export class AuthenticationService
       }
     }
   }
-
-
 
   async logout(){
     await this.storage.remove(JWT);
