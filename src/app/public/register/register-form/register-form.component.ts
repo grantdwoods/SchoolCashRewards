@@ -19,9 +19,7 @@ export class RegisterFormComponent implements OnInit {
 
   private schoolInfo: FormGroup;
   private userInfo: FormGroup;
-  private initalizationDone: boolean = true;
   
-
   constructor(private renderer: Renderer, private registrationService: RegistrationService, 
     private formBuilder:FormBuilder,  private toastContoller: ToastController, private authService: AuthenticationService) {}
 
@@ -62,13 +60,13 @@ export class RegisterFormComponent implements OnInit {
   async onUserSubmit() {
     try{
       var data = await this.registrationService.registerAccountWithAuth(this.userInfo, 0).toPromise();
-      console.log("we did it.");
 
       setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
-      
       setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
+
       await this.getJwtFromServer();
       await this.registrationService.registerAccountWithApp(this.userInfo).toPromise();
+
       this.authService.setAuthenticationState(true);
     }
     catch(error){
