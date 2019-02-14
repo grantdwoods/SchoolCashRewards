@@ -13,7 +13,7 @@ const ROLE = 'role';
 })
 export class AuthenticationService 
 {
-  BASEURL = "https://localhost/SchoolCashRewards/sp_auth/";
+  BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
