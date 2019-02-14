@@ -13,7 +13,7 @@ const ROLE = 'role';
 })
 export class AuthenticationService 
 {
-  BASEURL = "https://grantwoodscs.com/schoolCashRewards/sp_auth/";
+  BASEURL = "https://localhost/SchoolCashRewards/sp_auth/";
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
@@ -43,7 +43,7 @@ export class AuthenticationService
       this.role = data['role'];
       this.jwt = data['jwt'];
       this.storageState.next(true);
-      
+
       if(setAuthSate){
         this.setAuthenticationState(true);
       }
