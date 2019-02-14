@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../services/registration.service';
 import { ToastController } from '@ionic/angular';
 import { AuthenticationService } from '../../../services/authentication.service';
-import { userInfo } from 'os';
 
 @Component({
   selector: 'register-form',
@@ -16,10 +15,11 @@ export class RegisterFormComponent implements OnInit {
   @ViewChild('userForm', {read: ElementRef}) userForm;
   @ViewChild('progress', {read: ElementRef}) initProgress;
   @Input() newSchool:boolean;
-  @Output() initAppDb: boolean;
+  
 
   private schoolInfo: FormGroup;
   private userInfo: FormGroup;
+  private initalizationDone: boolean = true;
   
 
   constructor(private renderer: Renderer, private registrationService: RegistrationService, 
@@ -43,7 +43,7 @@ export class RegisterFormComponent implements OnInit {
       schoolName: ['',Validators.required], 
       schoolCashName:['', Validators.required]
     });
-    
+
   }
 
   ngAfterViewInit(){
@@ -53,39 +53,43 @@ export class RegisterFormComponent implements OnInit {
     else{
       setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '1'), 1000);
     }
-
   }
 
-  randomIntFromInterval(min,max) // min and max included
-  {
+  randomIntFromInterval(min,max){
     return Math.floor(Math.random()*(max-min+1)+min);
   }
 
-  onUserSubmit() {
-    this.registrationService.registerAccount(this.userInfo, 0).subscribe(
-      data =>{
-        //goto next component, initialize app DB.
-        console.log("we did it.");
-        setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
-        this.initAppDb = true;
-        setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
-        this.getJwtFromServer();
-      }, 
-      error =>{
-        if(error['status'] == 409){
-          this.userInfo.controls.userID.setValue("");
-        }
-        if(error['status'] == 400){
-          this.userInfo.controls.schoolID.setValue("");
-        }
+  async onUserSubmit() {
+    try{
+      var data = await this.registrationService.registerAccountWithAuth(this.userInfo, 0).toPromise();
+      console.log("we did it.");
+
+      setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
+      
+      setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
+      await this.getJwtFromServer();
+      await this.registrationService.registerAccountWithApp(this.userInfo).toPromise();
+      this.authService.setAuthenticationState(true);
+    }
+    catch(error){
+      if(error['status'] == 409){
+        this.userInfo.controls.userID.setValue("");
         this.presentToast(error['error']['err-message']);
-      });
+      }
+      if(error['status'] == 400){
+        this.userInfo.controls.schoolID.setValue("");
+        this.presentToast(error['error']['err-message']);
+      }
+      else{
+        console.log(error)
+      }
+    }
   }
 
-  getJwtFromServer(){
+  async getJwtFromServer(){
     var username =  this.userInfo.controls.userID.value;
     var password = this.userInfo.controls.password.value;
-    this.authService.login(username, password, false);
+    await this.authService.login(username, password, false);
   }
 
   MustMatch(controlName: string, matchingControlName: string) {

@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/Storage'
 import { HttpClient} from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
 
 const JWT = 'jwt';
 const ROLE = 'role';
@@ -14,6 +15,8 @@ export class AuthenticationService
 {
   BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
   authenticationState = new BehaviorSubject(false);
+  storageState = new BehaviorSubject(false);
+
   jwt = null;
   role : string;
   constructor(private plt: Platform, private storage: Storage, 
@@ -42,43 +45,46 @@ export class AuthenticationService
 
       await this.storage.set(JWT, data['jwt']);
       await this.storage.set(ROLE, data['role']);
+      this.storageState.next(true);
 
       if(setAuthSate){
         this.setAuthenticationState(true);
       }
     }
     catch(error){
-      this.presentToast(error['error']['err-message']);
+      console.log(error);
+      if(error['status'] == 401){
+        this.presentToast(error['error']['err-message']);
+      }
     }
   }
 
-  logout(){
-    return this.storage.remove(JWT).then(
-      ()=>{
-        this.storage.remove(ROLE).then(
-          () =>{
-            this.authenticationState.next(false);
-          });
-    });
+
+
+  async logout(){
+    await this.storage.remove(JWT);
+    await this.storage.remove(ROLE);
+
+    this.storageState.next(false);    
+    this.authenticationState.next(false);
   }
 
   isAuthenticated(): boolean{
     return this.authenticationState.value;
   }
 
-  checkToken(){
-     return this.storage.get(JWT).then(res =>{
-       if(res){
-         this.jwt = res;
-         this.storage.get(ROLE).then(
-          res =>{
-            if(res){
-              this.role = res;
-              this.authenticationState.next(true);
-            }  
-          });
-       }
-     });
+  storageValuesAreSet(): boolean{
+    return this.storageState.value;
+  }
+
+  async checkToken(){
+    //could/ should check against back-end for valid token (not expired)
+    this.jwt = await this.storage.get(JWT);
+    this.role = await this.storage.get(ROLE);
+    if(!isNullOrUndefined(this.jwt) && !isNullOrUndefined(this.role)){
+      this.storageState.next(true);
+      this.authenticationState.next(true);
+    }
   }
 
   getToken(){

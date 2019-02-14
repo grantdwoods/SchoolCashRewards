@@ -11,7 +11,7 @@ export class RegistrationService {
   constructor(private http:HttpClient, private authService:AuthenticationService) {
    }
 
-   registerAccount(formGroup: FormGroup, newSchool:number){
+   registerAccountWithAuth(formGroup: FormGroup, newSchool:number){
     var formData = new FormData();
     formData.append('userID', formGroup.value['userID']);
     formData.append('password', formGroup.value['password']);
@@ -19,7 +19,15 @@ export class RegistrationService {
     formData.append('schoolID', formGroup.value['schoolID']);
     formData.append('newSchool', newSchool.toString());
 
-    return this.http.post(this.authService.BASEURL + 'registerUser.php',formData,{})
+    return this.http.post(this.authService.BASEURL + 'registerUser.php',formData,{});
+   }
+
+   registerAccountWithApp(formGroup: FormGroup){
+    var formData = new FormData();
+    formData.append('firstName', formGroup.value['firstName']);
+    formData.append('lastName', formGroup.value['lastName']);
+
+    return this.http.post('teachers.php', formData,{});
    }
    
 }

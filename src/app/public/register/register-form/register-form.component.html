@@ -38,7 +38,7 @@
     <ion-button type="submit" [disabled]="!userInfo.valid">Submit</ion-button>
 </form>
 
-<div *ngIf="initAppDb" #progress>
+<div #progress>
     <ion-text color = "primary"><p>Setting things up...</p></ion-text> <br>
     <ion-progress-bar color="secondary" type="indeterminate" ></ion-progress-bar>
 </div>
