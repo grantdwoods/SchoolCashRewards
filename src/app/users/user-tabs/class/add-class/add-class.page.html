@@ -1,0 +1,22 @@
+<app-main-header [title]="'Add Class'"></app-main-header>
+<ion-content padding>
+  <ion-item>
+    <ion-label>Class name:</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>First name: </ion-label><ion-input [(ngModel)]='firstName'></ion-input>
+    <ion-label>Last name: </ion-label><ion-input [(ngModel)]='lastName'></ion-input>
+    <ion-label>User ID:</ion-label><ion-input [(ngModel)]='userID'></ion-input>
+    <ion-button (click)="onClickAddStudents(userID, firstName, lastName)">Add Student</ion-button>
+  </ion-item>
+
+  <ion-item *ngFor="let student of studentArray">
+    <ion-label>First name: {{ student.firstName }}</ion-label>
+    <ion-label>Last name: {{ student.lastName }}</ion-label>
+    <ion-button (click)="onClickRemoveStudent(student)">Remove Student</ion-button>
+  </ion-item>
+
+  <ion-button (click)="onClickRegisterClass()">Register Class</ion-button>
+</ion-content>

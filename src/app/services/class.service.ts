@@ -18,4 +18,15 @@ export class ClassService {
   {
     return this.http.get("classes.php");
   }
+
+  getClassByID(classID: number)
+  {
+    return this.http.get("classes.php?classID=" + classID);
+  }
+
+  getClassForTeacher()
+  {
+    return this.http.get("teaches.php");
+  }
+
 }
