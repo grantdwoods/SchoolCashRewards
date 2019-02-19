@@ -1,22 +1,32 @@
 <app-main-header [title]="'Class'"></app-main-header>
 <ion-content padding>
-    Role: {{role}}<br>
-    hasClass: {{hasClass}}<br>
-    <ion-item-divider *ngIf="hasClass">
+    <ion-item-group *ngIf="hasClass && role=='t'">
         <ion-item>
             <ion-label>
                 blah blah blah blah blah
             </ion-label>
         </ion-item>
-    </ion-item-divider>
-    <ion-item-divider *ngIf="!hasClass">
+    </ion-item-group>
+    <ion-item-group *ngIf="!hasClass && role=='t'">
         <ion-item>
             <ion-label>
                 It appears this teacher is not associated with a class. Click the add class button to add a class!
             </ion-label>
         </ion-item>
-        <ion-button (click)="addClass()">
-            Add Class
-        </ion-button>
-    </ion-item-divider>
+        <ion-item>
+            <ion-button (click)="addClass()">
+                Add Class
+            </ion-button>
+        </ion-item>
+    </ion-item-group>
+    <ion-item-group *ngIf="role=='a'">
+        <ion-item>
+            <ion-label>You have logged in as an admin</ion-label>
+        </ion-item>
+    </ion-item-group>
+    <ion-item-group *ngIf="role=='s'">
+        <ion-item>
+            <ion-label>You have logged in as a student</ion-label>
+        </ion-item>
+    </ion-item-group>
 </ion-content>

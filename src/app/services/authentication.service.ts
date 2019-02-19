@@ -91,4 +91,38 @@ export class AuthenticationService
       color: 'primary'});
       toast.present();
   }
+
+  async presentToastPos(message: string, pos: string)
+  {
+    if(pos == 'top')
+    {
+      const toast = await this.toastContoller.create({
+        message: message,
+        showCloseButton: false,
+        position: 'top',
+        duration: 2000,
+        color: 'primary'});
+        toast.present();
+    }
+    if(pos == 'middle')
+    {
+      const toast = await this.toastContoller.create({
+        message: message,
+        showCloseButton: false,
+        position: 'middle',
+        duration: 2000,
+        color: 'primary'});
+        toast.present();
+    }
+    if(pos == 'bottom')
+    {
+      const toast = await this.toastContoller.create({
+        message: message,
+        showCloseButton: false,
+        position: 'bottom',
+        duration: 2000,
+        color: 'primary'});
+        toast.present();
+    }
+  }
 }

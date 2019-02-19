@@ -20,7 +20,7 @@ export class StudentService {
     form.append('firstName', firstName);
     form.append('lastName', lastName);
     this.httpClient.post('students.php', form);
-    console.log('Class registered');
+    console.log('Student registered: ' + userID + ' ' + firstName + ' ' + lastName);
   }
   
 }
