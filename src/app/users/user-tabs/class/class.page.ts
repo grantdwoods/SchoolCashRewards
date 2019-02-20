@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class ClassPage implements OnInit {
 
   role: string;
-  classID$: object;
+  classID$: number;
   class$: object;
   students$: object;
   hasClass: boolean;
@@ -21,17 +21,27 @@ export class ClassPage implements OnInit {
      private router: Router
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.role = this.authService.getRole();
-    this.classService.getClassForTeacher().subscribe(
-      classID => { 
-        this.classID$ = classID; 
-      },
-      error => {this.authService.presentToast('This teacher does not have a class')}
-    );
+
+    var data = await this.classService.getClassForTeacher().toPromise()
+    
+    try
+    {
+      this.classID$ = data[0]['intClassID'];
+    }
+    catch(error)
+    {
+      if(error['status'] == 404)
+        console.log('Teacher has no class');
+      else
+        console.log('Unknown error');
+    }
 
     if(isNullOrUndefined(this.classID$))
+    {
       this.hasClass = false;
+    }
     else
       this.hasClass = true;
     //this.classService.getClassByID(this.classID$['intClassID']).subscribe(_class => (this.class$ = _class));

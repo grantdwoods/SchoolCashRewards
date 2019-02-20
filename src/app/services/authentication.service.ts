@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/Storage'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
 
 const JWT = 'jwt';
 const ROLE = 'role';
@@ -92,8 +93,10 @@ export class AuthenticationService
       toast.present();
   }
 
-  async presentToastPos(message: string, pos: string)
+  async presentToastPos(message: string, pos: string, color?: string)
   {
+    if(isNullOrUndefined(color))
+      color = 'primary';
     if(pos == 'top')
     {
       const toast = await this.toastContoller.create({
@@ -101,7 +104,7 @@ export class AuthenticationService
         showCloseButton: false,
         position: 'top',
         duration: 2000,
-        color: 'primary'});
+        color: color});
         toast.present();
     }
     if(pos == 'middle')
@@ -111,7 +114,7 @@ export class AuthenticationService
         showCloseButton: false,
         position: 'middle',
         duration: 2000,
-        color: 'primary'});
+        color: color});
         toast.present();
     }
     if(pos == 'bottom')
@@ -121,7 +124,7 @@ export class AuthenticationService
         showCloseButton: false,
         position: 'bottom',
         duration: 2000,
-        color: 'primary'});
+        color: color});
         toast.present();
     }
   }

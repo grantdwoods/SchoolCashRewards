@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AddClassPage implements OnInit {
 
-  className: string;
+  className= "";
   classID: string;
   studentArray: Array<object> = [];
   userID = "";
@@ -30,10 +30,15 @@ export class AddClassPage implements OnInit {
   onClickAddStudents(userID: string, firstName: string, lastName: string)
   {
     if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "")
+    {
       this.studentArray.push({userID: userID, firstName: firstName, lastName: lastName});
+      this.userID = "";
+      this.firstName = "";
+      this.lastName = "";
+    }
 
     else
-      this.authService.presentToastPos("Student must have ID, first, and last name", "bottom");
+      this.authService.presentToastPos('Student must have ID, first, and last name', 'bottom', 'danger');
   }
 
   onClickRemoveStudent(index: object)
@@ -43,7 +48,7 @@ export class AddClassPage implements OnInit {
 
   async onClickRegisterClass()
   {
-    if(this.studentArray.length > 0 && this.className != "")
+    if(this.studentArray.length > 0 && this.className.trim() != "")
     {
       try
       {
@@ -63,6 +68,6 @@ export class AddClassPage implements OnInit {
       }
     }
     else
-      this.authService.presentToastPos("Class must have name and at least one student", "bottom");
+      this.authService.presentToastPos('Class must have name and at least one student', 'bottom', 'danger');
   }
 }
