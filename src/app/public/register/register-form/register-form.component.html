@@ -1,0 +1,44 @@
+<form #schoolForm [formGroup]="schoolInfo" (ngSubmit)="onSchoolSubmit()" *ngIf="newSchool">
+    <ion-item>
+        <ion-label color="primary" fixed>School name:</ion-label>
+        <ion-input placeholder="School title" formControlName="schoolName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>School Cash:</ion-label>
+        <ion-input type="text" placeholder="Cash name" formControlName="schoolCashName"></ion-input>
+    </ion-item>
+    <ion-button type="submit" [disabled]="!schoolInfo.valid">Submit</ion-button>
+</form>
+
+<form #userForm [formGroup]="userInfo" (ngSubmit)="onUserSubmit()">
+    <ion-item>
+        <ion-label color="secondary" fixed>School Code:</ion-label>
+        <ion-input placeholder="School code" formControlName="schoolID"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>First Name:</ion-label>
+        <ion-input placeholder="First name" formControlName="firstName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>Last Name:</ion-label>
+        <ion-input placeholder="Last name" formControlName="lastName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="primary" fixed>Username:</ion-label>
+        <ion-input placeholder="Username" formControlName="userID"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="secondary" fixed>Password:</ion-label>
+        <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-item #confirm>
+        <ion-label color="secondary" fixed>Confirm Password:</ion-label>
+        <ion-input type="password" placeholder="Password" formControlName="confirmPass"></ion-input>
+    </ion-item>
+    <ion-button type="submit" [disabled]="!userInfo.valid">Submit</ion-button>
+</form>
+
+<div #progress>
+    <ion-text color = "primary"><p>Setting things up...</p></ion-text> <br>
+    <ion-progress-bar color="secondary" type="indeterminate" ></ion-progress-bar>
+</div>

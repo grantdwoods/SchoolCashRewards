@@ -10,6 +10,8 @@ import { AllClassesComponent } from './all-classes/all-classes.component';
 import { SingleClassComponent } from './single-class/single-class.component';
 import { StudentInfoComponent } from './student-info/student-info.component';
 import { SharedComponentsModule } from '../../../shared-components/shared-components.module';
+import { AwardModalPage } from './student-info/award-modal/award-modal.page';
+import { HistoryComponentComponent } from './student-info/history-component/history-component.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'all-classes', pathMatch: 'full'},
@@ -39,8 +41,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedComponentsModule
-  ],
-  declarations: [StudentPage, AllClassesComponent, SingleClassComponent, StudentInfoComponent]
+        SharedComponentsModule,
+    ],
+    declarations: [StudentPage, AllClassesComponent, SingleClassComponent, StudentInfoComponent, AwardModalPage, HistoryComponentComponent],
+    entryComponents: [AwardModalPage],
 })
 export class StudentPageModule {}

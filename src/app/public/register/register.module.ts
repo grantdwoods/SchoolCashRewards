@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { RegisterPage } from './register.page';
-import { NewSchoolComponent } from './new-school/new-school.component';
-import { ExistingSchoolComponent } from './existing-school/existing-school.component';
+import { RegisterFormComponent } from './register-form/register-form.component';
 
 const routes: Routes = [
   {
@@ -21,8 +20,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    FormsModule,
+    ReactiveFormsModule
   ],
-  declarations: [RegisterPage, NewSchoolComponent, ExistingSchoolComponent]
+  declarations: [RegisterPage, RegisterFormComponent]
 })
 export class RegisterPageModule {}

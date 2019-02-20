@@ -16,7 +16,7 @@ export class RegisterPage implements OnInit {
 
   hideRegisterSchool:boolean = false;
   newSchool: boolean = false;
-  existingSchool: boolean = false;
+  buttonClicked: boolean = false;
   constructor(private rednderer: Renderer) { }
 
   ngOnInit() {
@@ -24,12 +24,14 @@ export class RegisterPage implements OnInit {
   }
 
   showNewSchoolForm(){
-    this.hideRegister();
     this.newSchool = true;
+    this.buttonClicked = true;
+    this.hideRegister();
   }
   showExistingSchoolForm(){
+    this.newSchool = false;
+    this.buttonClicked = true;
     this.hideRegister();
-    this.existingSchool = true;
   }
 
   hideRegister(){

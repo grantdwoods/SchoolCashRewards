@@ -22,11 +22,11 @@ export class LoginPage implements OnInit {
   toggleForm(){
     this.showForm = true;
   }
+  
   login(){
-    console.log(this.username + ' ' + this.password);
-    console.log('Attempting log in....');
-    this.authService.login(this.username, this.password);
+    this.authService.login(this.username, this.password, true);
   }
+
   logOut(){
     this.authService.logout();
   }

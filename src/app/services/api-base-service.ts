@@ -7,14 +7,14 @@ import { AuthenticationService } from './authentication.service';
 })
 export class ApiBaseService implements HttpInterceptor{
   baseUrl: string = "http://localhost/SchoolCashRewards_php/sp_app/";
-  constructor(private authService :AuthenticationService) { }
+  constructor(private authService: AuthenticationService) { }
 
   onInit(){
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler)
   {
-    if(!this.authService.isAuthenticated()){
+    if(!this.authService.storageValuesAreSet()){
       return next.handle(req);
     }
     var newRequest;

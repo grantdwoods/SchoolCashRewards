@@ -13,12 +13,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiBaseService } from './services/api-base-service';
 import { UserRoutingModule } from './users/user-routing.module';
 import { SharedComponentsModule } from './shared-components/shared-components.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(),
-     HttpClientModule, UserRoutingModule, SharedComponentsModule],
+     HttpClientModule, UserRoutingModule, SharedComponentsModule, FormsModule, ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,
