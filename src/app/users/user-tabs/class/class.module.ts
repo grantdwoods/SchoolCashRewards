@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: '',
     component: ClassPage
+  },
+  {
+    path: './add-class',
+    loadChildren: './add-class/add-class.module#AddClassPageModule'
   }
 ];
 
