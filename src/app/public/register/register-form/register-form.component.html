@@ -1,4 +1,4 @@
-<form #schoolForm [formGroup]="schoolInfo" (ngSubmit)="onSchoolSubmit()" *ngIf="newSchool">
+<form #schoolForm [formGroup]="schoolInfo" (ngSubmit)="onSchoolSubmit()" *ngIf="showSchoolForm">
     <ion-item>
         <ion-label color="primary" fixed>School name:</ion-label>
         <ion-input placeholder="School title" formControlName="schoolName"></ion-input>
