@@ -7,6 +7,7 @@ import { isNullOrUndefined } from 'util';
 
 const JWT = 'jwt';
 const ROLE = 'role';
+const USERID = 'userID';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,10 @@ export class AuthenticationService
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
-  jwt = null;
+  jwt: string = null;
   role : string;
+  userID :string;
+
   constructor(private plt: Platform, private storage: Storage, 
     private http: HttpClient, private toastContoller: ToastController){ 
       
@@ -42,6 +45,11 @@ export class AuthenticationService
       
       this.role = data['role'];
       this.jwt = data['jwt'];
+      this.userID = data['userID'];
+      
+      await this.storage.set(ROLE, data['role']);
+      await this.storage.set(JWT, data['jwt']);
+      await this.storage.set(USERID, data['userID']);
       this.storageState.next(true);
 
       if(setAuthSate){
@@ -76,7 +84,8 @@ export class AuthenticationService
     //could/should check against back-end for valid token (not expired)
     this.jwt = await this.storage.get(JWT);
     this.role = await this.storage.get(ROLE);
-    if(!isNullOrUndefined(this.jwt) && !isNullOrUndefined(this.role)){
+    this.userID = await this.storage.get(USERID);
+    if(!isNullOrUndefined(this.jwt) && !isNullOrUndefined(this.role) && !isNullOrUndefined(this.userID)){
       this.storageState.next(true);
       this.authenticationState.next(true);
     }
