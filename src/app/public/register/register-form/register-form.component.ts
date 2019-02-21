@@ -107,7 +107,7 @@ export class RegisterFormComponent implements OnInit {
     let count = 0;
     let schoolCode = 0;
 
-    while(schoolExists && count < 100)
+    while(schoolExists && count < 10)
     {
       schoolCode = Math.floor(100000 + Math.random() * 900000);
       let data = await this.registrationService.checkForExistingSchool(schoolCode).toPromise();
