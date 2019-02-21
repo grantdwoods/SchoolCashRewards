@@ -26,9 +26,5 @@ export class LoginPage implements OnInit {
   login(){
     this.authService.login(this.username, this.password, true);
   }
-
-  logOut(){
-    this.authService.logout();
-  }
-
+  
 }

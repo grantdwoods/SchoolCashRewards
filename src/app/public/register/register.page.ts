@@ -36,7 +36,7 @@ export class RegisterPage implements OnInit {
 
   hideRegister(){
     this.rednderer.setElementStyle(this.choice.nativeElement, 'opacity', '0');
-    setTimeout(()=>{this.hideRegisterSchool = true}, 1000);
+    setTimeout(()=>this.hideRegisterSchool = true, 1000);
   }
 }
 //FOR ACESSING AN ARRAY OF ELEMENTREFS

@@ -1,8 +1,9 @@
 import { Component, OnInit, Renderer, ViewChild, ElementRef, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../services/registration.service';
-import { ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { AuthenticationService } from '../../../services/authentication.service';
+import { userInfo } from 'os';
 
 @Component({
   selector: 'register-form',
@@ -19,12 +20,14 @@ export class RegisterFormComponent implements OnInit {
 
   private schoolInfo: FormGroup;
   private userInfo: FormGroup;
+  private showSchoolForm: boolean;
   
   constructor(private renderer: Renderer, private registrationService: RegistrationService, 
-    private formBuilder:FormBuilder,  private toastContoller: ToastController, private authService: AuthenticationService) {}
+    private formBuilder:FormBuilder, private authService: AuthenticationService, private alertController: AlertController) {}
 
   ngOnInit() {
-    console.log(this.newSchool);
+    this.showSchoolForm = this.newSchool;
+
     this.userInfo = this.formBuilder.group({
       schoolID: ['', Validators.compose([Validators.required, Validators.pattern("[0-9]*")])],
       userID: ['', Validators.required],
@@ -53,18 +56,22 @@ export class RegisterFormComponent implements OnInit {
     }
   }
 
-  randomIntFromInterval(min,max){
-    return Math.floor(Math.random()*(max-min+1)+min);
+  switchToUserForm(): void{
+    setTimeout(() => this.showSchoolForm = false, 1000);
+    setTimeout(() => this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '1'), 1000);
   }
 
-  async onUserSubmit() {
+  async onUserSubmit(): Promise<void>{
     try{
-      var data = await this.registrationService.registerAccountWithAuth(this.userInfo, 0).toPromise();
+      var data = await this.registrationService.registerAccountWithAuth(this.userInfo, this.newSchool).toPromise();
 
       setTimeout(()=>this.renderer.setElementStyle(this.userForm.nativeElement, 'opacity', '0'), 1000);
       setTimeout(()=>this.renderer.setElementStyle(this.initProgress.nativeElement, 'opacity', '1'), 1000);
 
       await this.getJwtFromServer();
+      if(this.newSchool){
+        await this.registrationService.registerSchoolWithApp(this.schoolInfo).toPromise();
+      }
       await this.registrationService.registerAccountWithApp(this.userInfo).toPromise();
 
       this.authService.setAuthenticationState(true);
@@ -72,11 +79,11 @@ export class RegisterFormComponent implements OnInit {
     catch(error){
       if(error['status'] == 409){
         this.userInfo.controls.userID.setValue("");
-        this.presentToast(error['error']['err-message']);
+        this.authService.presentToast(error['error']['err-message']);
       }
       if(error['status'] == 400){
         this.userInfo.controls.schoolID.setValue("");
-        this.presentToast(error['error']['err-message']);
+        this.authService.presentToast(error['error']['err-message']);
       }
       else{
         console.log(error)
@@ -84,7 +91,33 @@ export class RegisterFormComponent implements OnInit {
     }
   }
 
-  async getJwtFromServer(){
+  async onSchoolSubmit(): Promise<void>{
+    let data = await this.generateSchoolCode();
+    this.presentAlert(data);
+  }
+
+  onAlertConfirm(schoolID:number): void{
+    this.userInfo.get("schoolID").setValue(schoolID);
+    this.userInfo.controls.schoolID.disable();
+    this.switchToUserForm();
+  }
+  
+  async generateSchoolCode(): Promise<number>{
+    let schoolExists = true;
+    let count = 0;
+    let schoolCode = 0;
+
+    while(schoolExists && count < 100)
+    {
+      schoolCode = Math.floor(100000 + Math.random() * 900000);
+      let data = await this.registrationService.checkForExistingSchool(schoolCode).toPromise();
+      schoolExists = data['schoolExists'];
+      count ++;
+    }
+    return schoolCode;
+  }
+
+  async getJwtFromServer(): Promise<void>{
     var username =  this.userInfo.controls.userID.value;
     var password = this.userInfo.controls.password.value;
     await this.authService.login(username, password, false);
@@ -107,14 +140,16 @@ export class RegisterFormComponent implements OnInit {
         }
     }
   }
-  
-  async presentToast(message:string){
-    const toast = await this.toastContoller.create({
-      message: message,
-      showCloseButton: false,
-      position: 'middle',
-      duration: 2000,
-      color: 'primary'});
-      toast.present();
+
+  async presentAlert(schoolID:number): Promise<void> {
+    const alert = await this.alertController.create({
+      header:"School Code: " + schoolID ,
+      subHeader: 'This is your School Code!',
+      message: "Save it somewhere!<br/> <br/> Other staff members will need this code to register an account with your school.",
+      buttons: [{text:'OK', handler: () => this.onAlertConfirm(schoolID)}]
+    });
+
+    await alert.present();
   }
+  
 }
