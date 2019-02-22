@@ -18,9 +18,9 @@ export class AuthenticationService
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
-  jwt: string = null;
-  role : string;
-  userID :string;
+  private jwt: string = null;
+  private role : string;
+  private userID :string;
 
   constructor(private plt: Platform, private storage: Storage, 
     private http: HttpClient, private toastContoller: ToastController){ 
@@ -97,6 +97,10 @@ export class AuthenticationService
 
   getRole(){
     return this.role;
+  }
+
+  getUserID(){
+    return this.userID;
   }
 
   async presentToast(message:string){

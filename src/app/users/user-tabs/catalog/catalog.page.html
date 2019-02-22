@@ -1,4 +1,10 @@
 <app-main-header [title]="'Catalog'"></app-main-header>
 <ion-content padding>
-
+    <ion-item>
+        <ion-label>Catalogs</ion-label>
+        <ion-select interface="alert" placeholder="Select One" >
+            <ion-select-option  *ngFor = 'let catalogOwner of catalogOwners' value={{catalogOwner.strTeacherID}}>
+                {{catalogOwner.strLastName}}, {{catalogOwner.strFirstName}}</ion-select-option>
+        </ion-select>
+      </ion-item>
 </ion-content>
