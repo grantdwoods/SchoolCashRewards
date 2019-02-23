@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Award Coupons</ion-title>
+    <ion-title>{{history.dtmDate}}</ion-title>
     <ion-buttons slot="end" color="light">
         <ion-button (click)="closeModal()">cancel</ion-button>
     </ion-buttons>
@@ -8,11 +8,13 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-item>
+    <p>Modal Works!</p>
+    <p>{{history.strComment}}</p>
+    <!--<ion-item>
         <ion-input [(ngModel)]="awardAmount" type="number" value=0 min="-100" max="100"></ion-input>
     </ion-item>
     <ion-item>
         <ion-textarea [(ngModel)]="description" placeholder="Description (optional)" maxlength="180"></ion-textarea>
     </ion-item>
-    <ion-button (click)="award()">Award!</ion-button>
+    <ion-button (click)="award()">Award!</ion-button>-->
 </ion-content>

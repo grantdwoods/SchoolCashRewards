@@ -6,7 +6,7 @@ import { AuthenticationService } from './authentication.service';
   providedIn: 'root'
 })
 export class ApiBaseService implements HttpInterceptor{
-  baseUrl: string = "http://localhost/SchoolCashRewards_php/sp_app/";
+  baseUrl: string = "http://localhost:999/SchoolCashRewards_php/sp_app/";
   constructor(private authService: AuthenticationService) { }
 
   onInit(){

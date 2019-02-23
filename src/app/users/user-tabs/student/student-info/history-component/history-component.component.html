@@ -2,7 +2,7 @@
   history-component works!
 </p>
 <ion-list>
-    <ion-item *ngFor="let history of historyInfo" (click)="openModalView()">
+    <ion-item *ngFor="let history of historyInfo" (click)="openModalView(history)">
         <p>
             {{history.dtmDate}}
         </p>
