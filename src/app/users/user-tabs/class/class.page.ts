@@ -22,12 +22,11 @@ export class ClassPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.role = this.authService.getRole();
-
-    var data = await this.classService.getClassForTeacher().toPromise()
     
+    this.role = this.authService.getRole();
     try
     {
+      var data = await this.classService.getClassForTeacher().toPromise()
       this.classID$ = data[0]['intClassID'];
     }
     catch(error)

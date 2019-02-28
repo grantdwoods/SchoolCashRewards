@@ -2,9 +2,24 @@
 <ion-content padding>
     <ion-item>
         <ion-label>Catalogs</ion-label>
-        <ion-select interface="alert" placeholder="Select One" >
+        <ion-select interface="alert" [(ngModel)]="selectedUser" placeholder="Select One" (ionChange) = changeCatalog()>
             <ion-select-option  *ngFor = 'let catalogOwner of catalogOwners' value={{catalogOwner.strTeacherID}}>
-                {{catalogOwner.strLastName}}, {{catalogOwner.strFirstName}}</ion-select-option>
+                {{catalogOwner.strFirstName}} {{catalogOwner.strLastName}}</ion-select-option>
         </ion-select>
       </ion-item>
+      <ion-item *ngIf="!hasCatalog">You do not have a class catalog set up.</ion-item>
+      <ion-grid>
+          <ion-row>
+              <ion-col *ngFor="let item of (catalogItems | async)">
+                    <ion-card>
+                            <ion-card-header>
+                              <ion-card-subtitle>{{item['strDescription']}}</ion-card-subtitle>
+                            </ion-card-header>
+                            <ion-card-content>
+                                    {{item['intCost']}}
+                            </ion-card-content>
+                          </ion-card>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
 </ion-content>

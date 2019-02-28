@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { CatalogService } from '../../../services/catalog.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-catalog',
@@ -13,6 +14,9 @@ export class CatalogPage implements OnInit {
 
   private catalogOwners :object;
   private hasCatalog :boolean = false;
+  private selectedUser:string;
+  private catalogItems: Observable<object>;
+  private i = Array;
 
   async ngOnInit() {
     this.catalogOwners = await this.catalogService.getCatalogOwners().toPromise();
@@ -21,13 +25,22 @@ export class CatalogPage implements OnInit {
     Object.keys(this.catalogOwners).map(key => {
       console.log(this.catalogOwners[key]);
       if(this.catalogOwners[key]['strTeacherID'] == userId){
-        this.hasCatalog == true;
+        this.hasCatalog = true;
       }
     });
-    
   }
 
   logout(){
     this.authService.logout();
+  }
+
+  changeCatalog(){ 
+    console.log("Event fired");
+    console.log(this.selectedUser);
+    
+    this.catalogItems = this.catalogService.getCatalog(this.selectedUser);
+    // Object.keys(this.catalogItems).map(key =>{
+    //   console.log(this.catalogItems[key]);
+    // });
   }
 }

@@ -41,7 +41,7 @@ export class AuthenticationService
     form.append('passWord', password);
     
     try{
-      var data = await this.http.post(this.BASEURL + 'log_in.php',form,{}).toPromise();
+      var data = await this.http.post(`${this.BASEURL}log_in.php`,form,{}).toPromise();
       
       this.role = data['role'];
       this.jwt = data['jwt'];
