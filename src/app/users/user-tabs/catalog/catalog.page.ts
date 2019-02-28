@@ -16,15 +16,16 @@ export class CatalogPage implements OnInit {
   private hasCatalog :boolean = false;
   private selectedUser:string;
   private catalogItems: Observable<object>;
-  private i = Array;
+  private userID: string;
 
   async ngOnInit() {
     this.catalogOwners = await this.catalogService.getCatalogOwners().toPromise();
     
-    let userId = this.authService.getUserID();
+    this.userID = this.authService.getUserID();
+
     Object.keys(this.catalogOwners).map(key => {
       console.log(this.catalogOwners[key]);
-      if(this.catalogOwners[key]['strTeacherID'] == userId){
+      if(this.catalogOwners[key]['strTeacherID'] == this.userID){
         this.hasCatalog = true;
       }
     });
@@ -43,4 +44,12 @@ export class CatalogPage implements OnInit {
     //   console.log(this.catalogItems[key]);
     // });
   }
+}
+export interface CatalogItem{
+  intSchoolID:number,
+  intItemID: number,
+  intCost: number,
+  strDescription:string,
+  strImageLocation:string,
+  strTeacherID: string
 }

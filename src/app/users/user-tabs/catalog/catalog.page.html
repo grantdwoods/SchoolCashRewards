@@ -2,7 +2,7 @@
 <ion-content padding>
     <ion-item>
         <ion-label>Catalogs</ion-label>
-        <ion-select interface="alert" [(ngModel)]="selectedUser" placeholder="Select One" (ionChange) = changeCatalog()>
+        <ion-select interface="alert" [value]="selectedUser" [(ngModel)]="selectedUser" placeholder="Select One" (ionChange) = changeCatalog()>
             <ion-select-option  *ngFor = 'let catalogOwner of catalogOwners' value={{catalogOwner.strTeacherID}}>
                 {{catalogOwner.strFirstName}} {{catalogOwner.strLastName}}</ion-select-option>
         </ion-select>
@@ -12,13 +12,17 @@
           <ion-row>
               <ion-col *ngFor="let item of (catalogItems | async)">
                     <ion-card>
-                            <ion-card-header>
-                              <ion-card-subtitle>{{item['strDescription']}}</ion-card-subtitle>
-                            </ion-card-header>
-                            <ion-card-content>
-                                    {{item['intCost']}}
-                            </ion-card-content>
-                          </ion-card>
+                        <ion-card-header>
+                            <ion-card-subtitle>{{item['strDescription']}}</ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                            {{item['intCost']}}
+                            <div *ngIf="item['strTeacherID'] == userID">
+                                    <ion-button color="primary" size="small">Edit</ion-button>
+                                    <ion-button color="danger" size="small">Remove</ion-button>
+                            </div>
+                        </ion-card-content>
+                    </ion-card>
               </ion-col>
           </ion-row>
       </ion-grid>
