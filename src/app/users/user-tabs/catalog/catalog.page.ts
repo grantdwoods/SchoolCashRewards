@@ -10,25 +10,31 @@ import { Observable } from 'rxjs';
 })
 export class CatalogPage implements OnInit {
 
-  constructor(private authService: AuthenticationService, private catalogService: CatalogService) { }
+  constructor(private authService: AuthenticationService, private catalogService: CatalogService) {
+    this.userID = this.authService.getUserID();
+  }
 
-  private catalogOwners :object;
+  private catalogOwners :Observable<object>;
   private hasCatalog :boolean = false;
   private selectedUser:string;
   private catalogItems: Observable<object>;
   private userID: string;
 
-  async ngOnInit() {
-    this.catalogOwners = await this.catalogService.getCatalogOwners().toPromise();
-    
-    this.userID = this.authService.getUserID();
-
-    Object.keys(this.catalogOwners).map(key => {
-      console.log(this.catalogOwners[key]);
-      if(this.catalogOwners[key]['strTeacherID'] == this.userID){
-        this.hasCatalog = true;
-      }
+  ngOnInit() {
+    this.catalogOwners = this.catalogService.getCatalogOwners();
+    this.catalogOwners.subscribe((data) => {
+      Object.keys(data).map(key => {
+        console.log(data);
+        if(data[key]['strTeacherID'] == this.userID){
+          this.hasCatalog = true;
+          this.catalogItems = this.catalogService.getCatalog(this.userID);
+        }
+      });
     });
+  }
+  
+  ionViewDidEnter(){
+    console.log("DID ENTER");
   }
 
   logout(){
@@ -40,12 +46,8 @@ export class CatalogPage implements OnInit {
     console.log(this.selectedUser);
     
     this.catalogItems = this.catalogService.getCatalog(this.selectedUser);
-    // Object.keys(this.catalogItems).map(key =>{
-    //   console.log(this.catalogItems[key]);
-    // });
   }
 }
-
 
 export interface CatalogItem{
   intSchoolID:number,

@@ -3,7 +3,7 @@
     <ion-item>
         <ion-label>Catalogs</ion-label>
         <ion-select interface="alert" [value]="selectedUser" [(ngModel)]="selectedUser" placeholder="Select One" (ionChange) = changeCatalog()>
-            <ion-select-option  *ngFor = 'let catalogOwner of catalogOwners' value={{catalogOwner.strTeacherID}}>
+            <ion-select-option  *ngFor = 'let catalogOwner of (catalogOwners | async)' value={{catalogOwner.strTeacherID}}>
                 {{catalogOwner.strFirstName}} {{catalogOwner.strLastName}}</ion-select-option>
         </ion-select>
       </ion-item>
