@@ -67,6 +67,7 @@ export class AuthenticationService
   async logout(){
     await this.storage.remove(JWT);
     await this.storage.remove(ROLE);
+    await this.storage.remove(USERID);
 
     this.storageState.next(false);    
     this.authenticationState.next(false);
