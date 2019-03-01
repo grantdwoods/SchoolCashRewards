@@ -45,6 +45,8 @@ export class CatalogPage implements OnInit {
     // });
   }
 }
+
+
 export interface CatalogItem{
   intSchoolID:number,
   intItemID: number,
