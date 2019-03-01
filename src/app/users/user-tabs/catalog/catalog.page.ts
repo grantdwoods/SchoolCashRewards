@@ -23,10 +23,6 @@ export class CatalogPage implements OnInit {
 
   ngOnInit() {
     console.log("ON INIT");
-  }
-  
-  ionViewDidEnter(){
-    console.log("DID ENTER");
     this.catalogOwners = this.catalogService.getCatalogOwners();
     this.catalogOwners.subscribe((data) => {
       Object.keys(data).map(key => {
@@ -34,9 +30,14 @@ export class CatalogPage implements OnInit {
         if(data[key]['strTeacherID'] == this.userID){
           this.hasCatalog = true;
           this.catalogItems = this.catalogService.getCatalog(this.userID);
+          this.selectedUser = this.userID;
         }
       });
     });
+  }
+  
+  ionViewDidEnter(){
+    console.log("DID ENTER");
   }
 
   logout(){
@@ -44,7 +45,7 @@ export class CatalogPage implements OnInit {
   }
 
   changeCatalog(){ 
-    console.log("Event fired");
+    console.log("Change event fired");
     console.log(this.selectedUser);
     if(this.selectedUser){
       this.catalogItems = this.catalogService.getCatalog(this.selectedUser);
