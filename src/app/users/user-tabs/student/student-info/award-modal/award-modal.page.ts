@@ -14,6 +14,7 @@ export class AwardModalPage implements OnInit{
 
     ngOnInit() {
         console.log(this.history);
+        //console.log(typeof(this.history.dtmDate));
         //this.month = history[0].dtmDate;
     }//end ngOnInit
 

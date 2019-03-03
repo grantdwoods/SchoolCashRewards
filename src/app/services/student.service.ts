@@ -31,13 +31,35 @@ export class StudentService {
 
   postStudentHistoryItem(userID: string, amount: number, comment: string, dateTime: string)
   {
+      const httpOptions = {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json'
+          })
+      };
       //calls the httpClient to add this transaction to the student
-      //return this.httpClient.post('history.php ');
+      var form = new FormData;
+      form.append('amount', amount.toString());
+      form.append('userID', userID);
+      form.append('dateTime', dateTime);
+      form.append('comment', comment);
+      const request = this.httpClient.post('history.php', form);
   }//end addStudentHistoryItem
 
   putStudentAward(userID: string, coupons: number)
   {
+      //userID is the id of the user being updated. coupons is the amount the award is being adjusted by.
       //calls the httpClient to apply the award to the proper student
-      //return this.httpClient.put('students.php?userID=' + userID + '&coupons=' + coupons);
+      try {
+          var form = new FormData;
+          form.append('userID', userID);
+          form.append('coupons', coupons.toString());
+          const request = this.httpClient.put('students.php', form);
+          request.subscribe();
+      }
+      catch (error)
+      {
+          console.log("something happened");
+          console.log(error);
+      }
   }//end updateStudentBalance
 }//end class

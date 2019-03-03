@@ -91,7 +91,7 @@ export class StudentInfoComponent implements OnInit {
                         }
                         //everything should check out. process the stuff
                         else {
-                            this.handleAward(parseInt(data.awardAmount), data.description);
+                            this.handleAward(parseInt(data.awardAmount), data.awardDescription);
                         }
                     }
                 }
@@ -115,13 +115,14 @@ export class StudentInfoComponent implements OnInit {
         //toast
         var studentName = this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName;
         this.displayToast("Awarding " + balance + " awards to " + studentName, "");
-        console.log("processing award: " + balance);
         //refresh page to show transaction has occured
     }//end handleAward
 
     private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
+        this.studentService.putStudentAward(this.userID, award);
+        console.log("Processed award. Current balance is: " + this.studentInfo[0].intCoupons);
     }//end updateBalance
 
     private logTransaction(awardAmount: number, description: string)

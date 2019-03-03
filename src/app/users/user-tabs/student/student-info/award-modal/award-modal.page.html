@@ -9,12 +9,19 @@
 
 <ion-content padding>
     <p>Modal Works!</p>
-    <p>{{history.strComment}}</p>
-    <!--<ion-item>
-        <ion-input [(ngModel)]="awardAmount" type="number" value=0 min="-100" max="100"></ion-input>
+    <ion-item>
+        <ion-label>Award Amount:</ion-label>
+        <ion-label>{{history.intAmount}}</ion-label>
     </ion-item>
     <ion-item>
-        <ion-textarea [(ngModel)]="description" placeholder="Description (optional)" maxlength="180"></ion-textarea>
+        <ion-label>Awarded by:</ion-label>
+        <ion-label>{{history.strTeacherID}}</ion-label>
     </ion-item>
-    <ion-button (click)="award()">Award!</ion-button>-->
+    <ion-item>
+        <p>Description:</p>
+        <ion-text>
+            <br />
+            {{history.strComment}}
+        </ion-text>
+    </ion-item>
 </ion-content>

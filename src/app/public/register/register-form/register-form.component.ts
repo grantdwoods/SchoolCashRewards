@@ -71,7 +71,7 @@ export class RegisterFormComponent implements OnInit {
       await this.getJwtFromServer();
       if(this.newSchool){
         await this.registrationService.registerSchoolWithApp(this.schoolInfo).toPromise();
-      }
+        }
       await this.registrationService.registerAccountWithApp(this.userInfo).toPromise();
 
       this.authService.setAuthenticationState(true);

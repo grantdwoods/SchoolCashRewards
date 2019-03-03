@@ -38,10 +38,11 @@ export class HistoryComponentComponent implements OnInit
         {                              //strangely, if this if check isn't here, you can still click on an invisible history item and throw errors.
             const modal = await this.modalController.create({
                 component: AwardModalPage,
-                componentProps: { history }
+                componentProps: { history}
             });
             await modal.present();
             console.log("history item clicked");
+            //console.log(typeof(history.dtmDate));
         }
     }//end openModalView
 }//end class
