@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Storage } from '@ionic/Storage'
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
 
-  constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, private storage: Storage) { }
 
   getStudentInfo(userID: string)
   {
@@ -31,11 +32,6 @@ export class StudentService {
 
   postStudentHistoryItem(userID: string, amount: number, comment: string, dateTime: string)
   {
-      const httpOptions = {
-          headers: new HttpHeaders({
-              'Content-Type': 'application/json'
-          })
-      };
       //calls the httpClient to add this transaction to the student
       var form = new FormData;
       form.append('amount', amount.toString());
@@ -45,15 +41,26 @@ export class StudentService {
       const request = this.httpClient.post('history.php', form);
   }//end addStudentHistoryItem
 
-  putStudentAward(userID: string, coupons: number)
+  async putStudentAward(userID: string, coupons: number)
   {
       //userID is the id of the user being updated. coupons is the amount the award is being adjusted by.
       //calls the httpClient to apply the award to the proper student
+      //set up the headers
+      const jwt = await this.storage.get('jwt');
+      const httpOptions = {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              //jwt token for auth
+              'Authorization': jwt
+          })
+      };
+      //attach headers somehow
       try {
           var form = new FormData;
           form.append('userID', userID);
           form.append('coupons', coupons.toString());
-          const request = this.httpClient.put('students.php', form);
+          const request = this.httpClient.put('students.php', form, {});
+          //console.log(request);
           request.subscribe();
       }
       catch (error)
@@ -61,5 +68,6 @@ export class StudentService {
           console.log("something happened");
           console.log(error);
       }
-  }//end updateStudentBalance
+    }//end updateStudentBalance
+
 }//end class

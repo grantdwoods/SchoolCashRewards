@@ -82,12 +82,12 @@ export class AuthenticationService
 
   async checkToken(){
     //could/should check against back-end for valid token (not expired)
-    this.jwt = await this.storage.get(JWT);
+      this.jwt = await this.storage.get(JWT);
     this.role = await this.storage.get(ROLE);
     this.userID = await this.storage.get(USERID);
     if(!isNullOrUndefined(this.jwt) && !isNullOrUndefined(this.role) && !isNullOrUndefined(this.userID)){
-      this.storageState.next(true);
-      this.authenticationState.next(true);
+        this.storageState.next(true);
+        this.authenticationState.next(true);
     }
   }
 
