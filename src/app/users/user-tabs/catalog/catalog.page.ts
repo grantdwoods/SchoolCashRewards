@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class CatalogPage implements OnInit {
 
   constructor(private authService: AuthenticationService, private catalogService: CatalogService) {
-    console.log("CONSTRUCTOR");
+    console.log("CATALOG-CONSTRUCTOR");
     this.userID = this.authService.getUserID();
   }
 
@@ -22,11 +22,13 @@ export class CatalogPage implements OnInit {
   private userID: string;
 
   ngOnInit() {
-    console.log("ON INIT");
+    console.log("CATALOG-ON INIT");
+
     this.catalogOwners = this.catalogService.getCatalogOwners();
+
     this.catalogOwners.subscribe((data) => {
+      console.log(data);
       Object.keys(data).map(key => {
-        console.log(data);
         if(data[key]['strTeacherID'] == this.userID){
           this.hasCatalog = true;
           this.catalogItems = this.catalogService.getCatalog(this.userID);
@@ -37,7 +39,7 @@ export class CatalogPage implements OnInit {
   }
   
   ionViewDidEnter(){
-    console.log("DID ENTER");
+    console.log("CATALOG-DID ENTER");
   }
 
   logout(){
@@ -45,7 +47,7 @@ export class CatalogPage implements OnInit {
   }
 
   changeCatalog(){ 
-    console.log("Change event fired");
+    console.log("CATALOG-Change event fired");
     console.log(this.selectedUser);
     if(this.selectedUser){
       this.catalogItems = this.catalogService.getCatalog(this.selectedUser);

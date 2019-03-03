@@ -8,7 +8,6 @@
         </ion-select>
       </ion-item>
       <ion-item *ngIf="!hasCatalog">You do not have a catalog set up.</ion-item>
-      <ion-button></ion-button>
       <ion-grid>
           <ion-row>
               <ion-col *ngFor="let item of (catalogItems | async)">
