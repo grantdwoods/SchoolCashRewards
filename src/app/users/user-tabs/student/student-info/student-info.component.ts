@@ -4,6 +4,7 @@ import { StudentService } from '../../../../services/student.service';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { AwardModalPage } from './award-modal/award-modal.page';
 import { isNullOrUndefined } from 'util';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-student-info',
@@ -13,7 +14,7 @@ import { isNullOrUndefined } from 'util';
 export class StudentInfoComponent implements OnInit {
 
     userID: string;
-    studentInfo: object = [];
+    studentInfo: Observable<object>;
     constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController, private alertController: AlertController, private toastController: ToastController) { }
 
     ngOnInit()
@@ -21,8 +22,8 @@ export class StudentInfoComponent implements OnInit {
         this.userID = this.activatedRoute.snapshot.paramMap.get('id');
 
         this.studentService.getStudentInfo(this.userID).subscribe(
-            studentInfo =>{
-                this.studentInfo = studentInfo;
+            info =>{
+                this.studentInfo = info;
             },
                 error => {
                 console.log(error["error"]["err-message"]);
