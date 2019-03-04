@@ -20,8 +20,8 @@ export class StudentService {
     form.append('userID', userID);
     form.append('firstName', firstName);
     form.append('lastName', lastName);
-    this.httpClient.post('students.php', form);
-    console.log('Student registered: ' + userID + ' ' + firstName + ' ' + lastName);
+    return this.httpClient.post('students.php', form);
+    //console.log('Student registered: ' + userID + ' ' + firstName + ' ' + lastName);
   }
   
   getStudentHistory(userID: string)
