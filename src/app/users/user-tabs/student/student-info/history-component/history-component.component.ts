@@ -13,27 +13,17 @@ import { Observable } from 'rxjs';
 })
 export class HistoryComponentComponent implements OnInit
 {
-    historyInfo: Observable<object>;
+    @Input() historyInfo: Observable<object>;
     @Input() userID: string;
     constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController) { }
 
     ngOnInit()
     {
-        //TODO: refactor to a toPromise() style
-        //gets the list of history items for this student from the database
-        /*this.studentService.getStudentHistory(this.userID).subscribe(
-            historyJSON => {
-                if (isArray(historyJSON)) //if the student has no history, then the historyJSON will come back with an error
-                    this.historyInfo = historyJSON;
-            },
-            error => {
-                console.log(error["error"]["err-message"]);
-            });*/
-        this.historyInfo = this.studentService.getStudentHistory(this.userID);
-    }//end ngOnInit
+    }
 
     async openModalView(history: object)
     {
+        console.log("OPEN MODAL");
         //opens a modal showing an enlarged view of the history item.
         if (isArray(this.historyInfo)) //if the historyInfo is an array, we can assume that the student has some history
         {                              //strangely, if this if check isn't here, you can still click on an invisible history item and throw errors.

@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { StudentService } from '../../../../services/student.service';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { AwardModalPage } from './award-modal/award-modal.page';
-import { isNullOrUndefined } from 'util';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -15,6 +14,7 @@ export class StudentInfoComponent implements OnInit {
 
     userID: string;
     studentInfo: Observable<object>;
+    historyInfo: Observable<object>;
     coupons: number;
     fName: string;
     lName: string;
@@ -22,15 +22,10 @@ export class StudentInfoComponent implements OnInit {
 
     ngOnInit()
     {
+       
         this.userID = this.activatedRoute.snapshot.paramMap.get('id');
+        this.historyInfo = this.studentService.getStudentHistory(this.userID);
         this.studentInfo = this.studentService.getStudentInfo(this.userID);
-        /*this.studentService.getStudentInfo(this.userID).subscribe(
-            info =>{
-                this.studentInfo = info;
-            },
-                error => {
-                console.log(error["error"]["err-message"]);
-            });*/
         this.studentInfo.subscribe((data) => {
             console.log(data[0]);
             this.coupons = data[0].intCoupons;
@@ -65,8 +60,8 @@ export class StudentInfoComponent implements OnInit {
                     id: 'num-award',
                     type: 'number',
                     value: 0,
-                    min: -50,
-                    max: 50
+                    min: -10000,
+                    max: 10000
                 },
                 {
                     name: 'awardDescription',
@@ -130,7 +125,7 @@ export class StudentInfoComponent implements OnInit {
     private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
-        this.studentService.putStudentAward(this.userID, award).subscribe();
+        this.studentService.putStudentAward(this.userID, award).subscribe(() => this.studentInfo = this.studentService.getStudentInfo(this.userID));
         console.log("Processed award. Current balance is: " + this.coupons);
     }//end updateBalance
 
@@ -139,9 +134,15 @@ export class StudentInfoComponent implements OnInit {
         //makes a database request to add this transaction to this student's history list
         //TODO: get this user's name and verify date format.
         var currentTime = new Date();
-        console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + currentTime);
-        var formattedTime = "";
-        this.studentService.postStudentHistoryItem(this.userID, awardAmount, description, formattedTime).subscribe();
+
+        //year month day
+        let dateTime:string = `${currentTime.getFullYear()}-${currentTime.getMonth()}-${currentTime.getDay()} 
+        ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+        console.log("DATETIME: " + dateTime);
+        console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + dateTime);
+        
+        this.studentService.postStudentHistoryItem(this.userID, awardAmount, description, dateTime).subscribe(()=> 
+        this.historyInfo = this.studentService.getStudentHistory(this.userID));
     }//end logTransaction
 
     private async displayToast(toastText: string, color: string)
@@ -156,6 +157,7 @@ export class StudentInfoComponent implements OnInit {
 
     private refreshPage(event)
     {
+        
         console.log("refreshing page");
         setTimeout(() => {
             console.log("refresh has ended");

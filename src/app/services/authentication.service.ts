@@ -14,7 +14,7 @@ const USERID = 'userID';
 })
 export class AuthenticationService 
 {
-  BASEURL = "http://localhost:999/SchoolCashRewards_php/sp_auth/";
+  BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
