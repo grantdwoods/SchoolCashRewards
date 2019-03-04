@@ -118,10 +118,10 @@ export class StudentInfoComponent implements OnInit {
         //refresh page to show transaction has occured
     }//end handleAward
 
-    private async updateBalance(award: number)
+    private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
-        await this.studentService.putStudentAward(this.userID, award);
+        this.studentService.putStudentAward(this.userID, award).subscribe();
         console.log("Processed award. Current balance is: " + this.studentInfo[0].intCoupons);
     }//end updateBalance
 

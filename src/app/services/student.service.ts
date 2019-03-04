@@ -41,33 +41,12 @@ export class StudentService {
       const request = this.httpClient.post('history.php', form);
   }//end addStudentHistoryItem
 
-  async putStudentAward(userID: string, coupons: number)
-  {
-      //userID is the id of the user being updated. coupons is the amount the award is being adjusted by.
-      //calls the httpClient to apply the award to the proper student
-      //set up the headers
-      const jwt = await this.storage.get('jwt');
-      const httpOptions = {
-          headers: new HttpHeaders({
-              'Content-Type': 'application/json',
-              //jwt token for auth
-              'Authorization': jwt
-          })
-      };
-      //attach headers somehow
-      try {
-          var form = new FormData;
-          form.append('userID', userID);
-          form.append('coupons', coupons.toString());
-          const request = this.httpClient.put('students.php', form, {});
-          //console.log(request);
-          request.subscribe();
-      }
-      catch (error)
-      {
-          console.log("something happened");
-          console.log(error);
-      }
+    putStudentAward(userID: string, coupons: number)
+    {
+        //userID is the id of the user being updated. coupons is the amount the award is being adjusted by.
+        //calls the httpClient to apply the award to the proper student
+        let body = `{"userID":"${userID}", "coupons":"${coupons}"}`;
+        return this.httpClient.put('students.php', body, {});
     }//end updateStudentBalance
 
 }//end class
