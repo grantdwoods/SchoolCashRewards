@@ -1,0 +1,11 @@
+<ion-title>
+  {{ className$ }}
+</ion-title>
+<ion-label padding>
+  Class coupons: {{ classCoupons$ }}
+</ion-label> 
+<ion-list *ngFor="let student of students$" lines="full">
+  <ion-item>
+    <ion-label>{{ student.strFirstName }} {{ student.strLastName }}</ion-label>
+  </ion-item>
+</ion-list>

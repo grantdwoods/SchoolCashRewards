@@ -31,14 +31,10 @@ export class ClassService {
 
   postNewClass(className: string)
   {
-    var classID = '13';
     var form = new FormData;
-    form.append('classID', classID);
     form.append('className', className);
-    this.http.post("classes.php", form);
-    console.log("Posted class " + className + " with ID " + classID);
-
-    return classID;
+    this.http.post('classes.php', form);
+    console.log('Posted class ' + className);
   }
 
   postNewTakes(classID: string, userID: string)

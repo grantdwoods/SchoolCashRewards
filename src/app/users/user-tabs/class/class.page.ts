@@ -23,11 +23,10 @@ export class ClassPage implements OnInit {
 
   async ngOnInit() {
     this.role = this.authService.getRole();
-
-    var data = await this.classService.getClassForTeacher().toPromise()
     
     try
     {
+      var data = await this.classService.getClassForTeacher().toPromise()
       this.classID$ = data[0]['intClassID'];
     }
     catch(error)

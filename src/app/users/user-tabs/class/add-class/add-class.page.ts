@@ -11,12 +11,12 @@ import { Router } from '@angular/router';
 })
 export class AddClassPage implements OnInit {
 
-  className= "";
+  className: string = "";
   classID: string;
   studentArray: Array<object> = [];
-  userID = "";
-  firstName = "";
-  lastName = "";
+  userID: string = "";
+  firstName: string = "";
+  lastName: string = "";
   constructor(
     private studentService: StudentService, 
     private classService: ClassService,
@@ -46,18 +46,23 @@ export class AddClassPage implements OnInit {
     this.studentArray.splice(this.studentArray.indexOf(index), 1)
   }
 
-  async onClickRegisterClass()
+  onClickRegisterClass()
+  {
+    this.registerClass();
+  }
+
+  async registerClass()
   {
     if(this.studentArray.length > 0 && this.className.trim() != "")
     {
       try
       {
-        this.classID = await this.classService.postNewClass(this.className);
+        let data1 = await this.classService.postNewClass(this.className);
 
         for(let student of this.studentArray)
         {
-          await this.studentService.postStudentInfo(student['userID'], student['firstName'], student['lastName']);
-          await this.classService.postNewTakes(this.classID, student['userID']);
+          let data2 = await this.studentService.postStudentInfo(student['userID'], student['firstName'], student['lastName']);
+          let data3 = await this.classService.postNewTakes(this.classID, student['userID']);
         }
 
         this.router.navigateByUrl('/user-tabs/class')
