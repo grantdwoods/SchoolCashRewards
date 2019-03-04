@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ClassPage } from './class.page';
 import { SharedComponentsModule } from '../../../shared-components/shared-components.module';
+import { ShowClassComponent } from './show-class/show-class.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [ClassPage]
+  declarations: [ClassPage, ShowClassComponent]
 })
 export class ClassPageModule {}

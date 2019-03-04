@@ -22,6 +22,7 @@ export class ClassPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.role = this.authService.getRole();
     
     this.role = this.authService.getRole();
     try
