@@ -5,7 +5,7 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <div *ngFor="let student of studentInfo">
+    <div *ngFor="let student of (studentInfo | async)">
         <h3>{{ student.strFirstName }} {{student.strLastName}}</h3>
         <h3>{{ student.intCoupons }}</h3>
     </div>
