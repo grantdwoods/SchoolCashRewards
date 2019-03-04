@@ -4,6 +4,7 @@ import { StudentService } from '../../../../../services/student.service';
 import { AwardModalPage } from '../award-modal/award-modal.page';
 import { ModalController } from '@ionic/angular';
 import { isArray } from 'util';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-history-component',
@@ -12,7 +13,7 @@ import { isArray } from 'util';
 })
 export class HistoryComponentComponent implements OnInit
 {
-    historyInfo: object = [];
+    historyInfo: Observable<object>;
     @Input() userID: string;
     constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController) { }
 
@@ -20,15 +21,15 @@ export class HistoryComponentComponent implements OnInit
     {
         //TODO: refactor to a toPromise() style
         //gets the list of history items for this student from the database
-        this.studentService.getStudentHistory(this.userID).subscribe(
+        /*this.studentService.getStudentHistory(this.userID).subscribe(
             historyJSON => {
                 if (isArray(historyJSON)) //if the student has no history, then the historyJSON will come back with an error
                     this.historyInfo = historyJSON;
             },
             error => {
                 console.log(error["error"]["err-message"]);
-            });
-        console.log(this.historyInfo);
+            });*/
+        this.historyInfo = this.studentService.getStudentHistory(this.userID);
     }//end ngOnInit
 
     async openModalView(history: object)

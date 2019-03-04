@@ -32,13 +32,13 @@ export class StudentService {
 
   postStudentHistoryItem(userID: string, amount: number, comment: string, dateTime: string)
   {
-      //calls the httpClient to add this transaction to the student
-      var form = new FormData;
+      //calls the httpClient to add this transaction to the student's history list
+      let form = new FormData;
       form.append('amount', amount.toString());
       form.append('userID', userID);
       form.append('dateTime', dateTime);
       form.append('comment', comment);
-      const request = this.httpClient.post('history.php', form);
+      return this.httpClient.post('history.php', form, {});
   }//end addStudentHistoryItem
 
     putStudentAward(userID: string, coupons: number)

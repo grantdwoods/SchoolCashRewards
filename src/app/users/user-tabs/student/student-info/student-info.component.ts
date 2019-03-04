@@ -15,12 +15,15 @@ export class StudentInfoComponent implements OnInit {
 
     userID: string;
     studentInfo: Observable<object>;
+    coupons: number;
+    fName: string;
+    lName: string;
     constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController, private alertController: AlertController, private toastController: ToastController) { }
 
     ngOnInit()
     {
         this.userID = this.activatedRoute.snapshot.paramMap.get('id');
-
+        this.studentInfo = this.studentService.getStudentInfo(this.userID);
         /*this.studentService.getStudentInfo(this.userID).subscribe(
             info =>{
                 this.studentInfo = info;
@@ -29,7 +32,11 @@ export class StudentInfoComponent implements OnInit {
                 console.log(error["error"]["err-message"]);
             });*/
         this.studentInfo.subscribe((data) => {
-
+            console.log(data[0]);
+            this.coupons = data[0].intCoupons;
+            this.fName = data[0].strFirstName;
+            this.lName = data[0].strLastName;
+            console.log(this.fName + " " + this.lName + ": " + this.coupons);
         });
     }//end ngOnInit
 
@@ -88,7 +95,7 @@ export class StudentInfoComponent implements OnInit {
                             return false; //this prevents the alert from closing
                         }
                         //check if the balance will be < 0. If so, alert the user
-                        else if (this.studentInfo[0].intCoupons + parseInt(data.awardAmount) < 0) {
+                        else if (this.coupons + parseInt(data.awardAmount) < 0) {
                             this.displayToast("Error: Student would have negative awards!", "danger");
                             console.log("negative balance");
                             return false;
@@ -111,22 +118,20 @@ export class StudentInfoComponent implements OnInit {
 
     private handleAward(award: number, description: string)
     {
-        var balance = this.studentInfo[0].intCoupons + award;
         //update the student's coupon count
         this.updateBalance(award);
         //add transaction to award history
         this.logTransaction(award, description);
         //toast
-        var studentName = this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName;
-        this.displayToast("Awarding " + balance + " awards to " + studentName, "");
-        //refresh page to show transaction has occured
+        var studentName = this.fName + " " + this.lName;
+        this.displayToast("Awarding " + award + " awards to " + studentName, "");
     }//end handleAward
 
     private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
         this.studentService.putStudentAward(this.userID, award).subscribe();
-        console.log("Processed award. Current balance is: " + this.studentInfo[0].intCoupons);
+        console.log("Processed award. Current balance is: " + this.coupons);
     }//end updateBalance
 
     private logTransaction(awardAmount: number, description: string)
@@ -135,6 +140,8 @@ export class StudentInfoComponent implements OnInit {
         //TODO: get this user's name and verify date format.
         var currentTime = new Date();
         console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + currentTime);
+        var formattedTime = "";
+        this.studentService.postStudentHistoryItem(this.userID, awardAmount, description, formattedTime).subscribe();
     }//end logTransaction
 
     private async displayToast(toastText: string, color: string)
