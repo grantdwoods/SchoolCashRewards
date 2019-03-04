@@ -14,6 +14,8 @@ export class ApiBaseService implements HttpInterceptor{
 
   intercept(req: HttpRequest<any>, next: HttpHandler)
   {
+      //console.log(req);
+
     if(!this.authService.storageValuesAreSet()){
       return next.handle(req);
     }
@@ -24,5 +26,5 @@ export class ApiBaseService implements HttpInterceptor{
       url: url
     });
     return next.handle(newRequest);
-  }
-}
+  }//end intercept
+}//end class

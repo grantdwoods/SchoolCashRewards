@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { StudentService } from '../../../../services/student.service';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { AwardModalPage } from './award-modal/award-modal.page';
-import { isNullOrUndefined } from 'util';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-student-info',
@@ -13,20 +13,26 @@ import { isNullOrUndefined } from 'util';
 export class StudentInfoComponent implements OnInit {
 
     userID: string;
-    studentInfo: object = [];
+    studentInfo: Observable<object>;
+    historyInfo: Observable<object>;
+    coupons: number;
+    fName: string;
+    lName: string;
     constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private modalController: ModalController, private alertController: AlertController, private toastController: ToastController) { }
 
     ngOnInit()
     {
+       
         this.userID = this.activatedRoute.snapshot.paramMap.get('id');
-
-        this.studentService.getStudentInfo(this.userID).subscribe(
-            studentInfo =>{
-                this.studentInfo = studentInfo;
-            },
-                error => {
-                console.log(error["error"]["err-message"]);
-            });
+        this.historyInfo = this.studentService.getStudentHistory(this.userID);
+        this.studentInfo = this.studentService.getStudentInfo(this.userID);
+        this.studentInfo.subscribe((data) => {
+            console.log(data[0]);
+            this.coupons = data[0].intCoupons;
+            this.fName = data[0].strFirstName;
+            this.lName = data[0].strLastName;
+            console.log(this.fName + " " + this.lName + ": " + this.coupons);
+        });
     }//end ngOnInit
 
     async awardCoupons()
@@ -54,8 +60,8 @@ export class StudentInfoComponent implements OnInit {
                     id: 'num-award',
                     type: 'number',
                     value: 0,
-                    min: -50,
-                    max: 50
+                    min: -10000,
+                    max: 10000
                 },
                 {
                     name: 'awardDescription',
@@ -84,14 +90,14 @@ export class StudentInfoComponent implements OnInit {
                             return false; //this prevents the alert from closing
                         }
                         //check if the balance will be < 0. If so, alert the user
-                        else if (this.studentInfo[0].intCoupons + parseInt(data.awardAmount) < 0) {
+                        else if (this.coupons + parseInt(data.awardAmount) < 0) {
                             this.displayToast("Error: Student would have negative awards!", "danger");
                             console.log("negative balance");
                             return false;
                         }
                         //everything should check out. process the stuff
                         else {
-                            this.handleAward(parseInt(data.awardAmount), data.description);
+                            this.handleAward(parseInt(data.awardAmount), data.awardDescription);
                         }
                     }
                 }
@@ -107,21 +113,20 @@ export class StudentInfoComponent implements OnInit {
 
     private handleAward(award: number, description: string)
     {
-        var balance = this.studentInfo[0].intCoupons + award;
         //update the student's coupon count
         this.updateBalance(award);
         //add transaction to award history
         this.logTransaction(award, description);
         //toast
-        var studentName = this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName;
-        this.displayToast("Awarding " + balance + " awards to " + studentName, "");
-        console.log("processing award: " + balance);
-        //refresh page to show transaction has occured
+        var studentName = this.fName + " " + this.lName;
+        this.displayToast("Awarding " + award + " awards to " + studentName, "");
     }//end handleAward
 
     private updateBalance(award: number)
     {
         //makes a database request to update this student's award count
+        this.studentService.putStudentAward(this.userID, award).subscribe(() => this.studentInfo = this.studentService.getStudentInfo(this.userID));
+        console.log("Processed award. Current balance is: " + this.coupons);
     }//end updateBalance
 
     private logTransaction(awardAmount: number, description: string)
@@ -129,7 +134,15 @@ export class StudentInfoComponent implements OnInit {
         //makes a database request to add this transaction to this student's history list
         //TODO: get this user's name and verify date format.
         var currentTime = new Date();
-        console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + currentTime);
+
+        //year month day
+        let dateTime:string = `${currentTime.getFullYear()}-${currentTime.getMonth()}-${currentTime.getDay()} 
+        ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+        console.log("DATETIME: " + dateTime);
+        console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + dateTime);
+        
+        this.studentService.postStudentHistoryItem(this.userID, awardAmount, description, dateTime).subscribe(()=> 
+        this.historyInfo = this.studentService.getStudentHistory(this.userID));
     }//end logTransaction
 
     private async displayToast(toastText: string, color: string)
@@ -144,6 +157,7 @@ export class StudentInfoComponent implements OnInit {
 
     private refreshPage(event)
     {
+        
         console.log("refreshing page");
         setTimeout(() => {
             console.log("refresh has ended");

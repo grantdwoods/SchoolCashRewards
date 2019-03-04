@@ -18,9 +18,9 @@ export class AuthenticationService
   authenticationState = new BehaviorSubject(false);
   storageState = new BehaviorSubject(false);
 
-  jwt: string = null;
-  role : string;
-  userID :string;
+  private jwt: string = null;
+  private role : string;
+  private userID :string;
 
   constructor(private plt: Platform, private storage: Storage, 
     private http: HttpClient, private toastContoller: ToastController){ 
@@ -41,7 +41,7 @@ export class AuthenticationService
     form.append('passWord', password);
     
     try{
-      var data = await this.http.post(this.BASEURL + 'log_in.php',form,{}).toPromise();
+      var data = await this.http.post(`${this.BASEURL}log_in.php`,form,{}).toPromise();
       
       this.role = data['role'];
       this.jwt = data['jwt'];
@@ -67,6 +67,7 @@ export class AuthenticationService
   async logout(){
     await this.storage.remove(JWT);
     await this.storage.remove(ROLE);
+    await this.storage.remove(USERID);
 
     this.storageState.next(false);    
     this.authenticationState.next(false);
@@ -82,12 +83,12 @@ export class AuthenticationService
 
   async checkToken(){
     //could/should check against back-end for valid token (not expired)
-    this.jwt = await this.storage.get(JWT);
+      this.jwt = await this.storage.get(JWT);
     this.role = await this.storage.get(ROLE);
     this.userID = await this.storage.get(USERID);
     if(!isNullOrUndefined(this.jwt) && !isNullOrUndefined(this.role) && !isNullOrUndefined(this.userID)){
-      this.storageState.next(true);
-      this.authenticationState.next(true);
+        this.storageState.next(true);
+        this.authenticationState.next(true);
     }
   }
 
@@ -97,6 +98,10 @@ export class AuthenticationService
 
   getRole(){
     return this.role;
+  }
+
+  getUserID(){
+    return this.userID;
   }
 
   async presentToast(message:string){
