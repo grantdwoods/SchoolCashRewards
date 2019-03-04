@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-class',
@@ -9,7 +10,7 @@ import { ClassService } from '../../../../services/class.service';
 })
 export class ShowClassComponent implements OnInit {
 
-  constructor(private studentService: StudentService, private classService: ClassService) { }
+  constructor(private studentService: StudentService, private classService: ClassService, private router: Router) { }
 
   students$: any;
   classID$: number;
@@ -28,6 +29,11 @@ export class ShowClassComponent implements OnInit {
     this.students$ = data3;
     console.log(data3);
     console.log(data3[0]);
+  }
+
+  routeToStudent(strStudentID: string)
+  {
+    this.router.navigateByUrl('../student/student-info/' + strStudentID);
   }
 
 }

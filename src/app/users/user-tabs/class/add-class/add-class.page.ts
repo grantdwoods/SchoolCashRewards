@@ -57,12 +57,17 @@ export class AddClassPage implements OnInit {
     {
       try
       {
-        let data1 = await this.classService.postNewClass(this.className);
+        await this.classService.postNewClass(this.className).toPromise();
+        console.log('Class Posted');
+        let data1 = await this.classService.getClassForTeacher().toPromise();
+        console.log(data1['classID']);
+        this.classID = data1['classID'];
+        await this.classService.postNewTeaches(this.classID).toPromise();
 
         for(let student of this.studentArray)
         {
-          let data2 = await this.studentService.postStudentInfo(student['userID'], student['firstName'], student['lastName']);
-          let data3 = await this.classService.postNewTakes(this.classID, student['userID']);
+          await this.studentService.postStudentInfo(student['userID'], student['firstName'], student['lastName']).toPromise();
+          await this.classService.postNewTakes(this.classID, student['userID']).toPromise();
         }
 
         this.router.navigateByUrl('/user-tabs/class')

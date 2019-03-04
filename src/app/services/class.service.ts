@@ -33,8 +33,15 @@ export class ClassService {
   {
     var form = new FormData;
     form.append('className', className);
-    this.http.post('classes.php', form);
+    return this.http.post('classes.php', form);
     console.log('Posted class ' + className);
+  }
+
+  postNewTeaches(classID: string)
+  {
+    var form = new FormData;
+    form.append('classID', classID);
+    return this.http.post('teaches.php?', form);
   }
 
   postNewTakes(classID: string, userID: string)
@@ -42,7 +49,7 @@ export class ClassService {
     var form = new FormData;
     form.append('classID', classID);
     form.append('userID', userID);
-    this.http.post("takes.php", form);
+    return this.http.post("takes.php", form);
 
     console.log("Posted new takes with classID=" + classID + " and userID=" + userID);
   }

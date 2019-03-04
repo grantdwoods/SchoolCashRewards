@@ -5,7 +5,7 @@
   Class coupons: {{ classCoupons$ }}
 </ion-label> 
 <ion-list *ngFor="let student of students$" lines="full">
-  <ion-item>
+  <ion-item (click)="routeToStudent(student.strStudentID)">
     <ion-label>{{ student.strFirstName }} {{ student.strLastName }}</ion-label>
   </ion-item>
 </ion-list>
