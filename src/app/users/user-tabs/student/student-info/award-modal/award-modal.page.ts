@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NavParams, ModalController, ToastController } from '@ionic/angular';
+import { NavParams, ModalController} from '@ionic/angular';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-award-modal',
@@ -7,15 +8,13 @@ import { NavParams, ModalController, ToastController } from '@ionic/angular';
   styleUrls: ['./award-modal.page.scss'],
 })
 export class AwardModalPage implements OnInit{
-    constructor(private modalController: ModalController, private toastController: ToastController) { }
+    constructor(private modalController: ModalController) { }
     @Input() history: object;
-    private month: string;
-    private day: string;
+    date: Date;
 
     ngOnInit() {
-        console.log(this.history);
-        //console.log(typeof(this.history.dtmDate));
-        //this.month = history[0].dtmDate;
+        this.date = new Date(this.history.dtmDate);//ignore the red squiggly. It pulls the info for some reason despite it.
+        console.log(this.date);
     }//end ngOnInit
 
     private closeModal()
@@ -23,5 +22,16 @@ export class AwardModalPage implements OnInit{
         //closes the modal and returns to the student's page
         this.modalController.dismiss();
     }//end closeModal
+
+    private extractDate()
+    {
+        var ret = "0";
+        if (!isNullOrUndefined(this.date))
+        {
+            ret = this.date.toLocaleDateString("en-US") + " @ ";
+            ret += this.date.toLocaleTimeString("en-US"); 
+        }
+        return ret;
+    }//end extractDate
 
 }//end class

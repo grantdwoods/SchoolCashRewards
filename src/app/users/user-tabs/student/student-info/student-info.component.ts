@@ -132,12 +132,10 @@ export class StudentInfoComponent implements OnInit {
     private logTransaction(awardAmount: number, description: string)
     {
         //makes a database request to add this transaction to this student's history list
-        //TODO: get this user's name and verify date format.
         var currentTime = new Date();
-
+        console.log(currentTime.toJSON());
         //year month day
-        let dateTime:string = `${currentTime.getFullYear()}-${currentTime.getMonth()}-${currentTime.getDay()} 
-        ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+        let dateTime: string = `${currentTime.getFullYear()}-${currentTime.getMonth()}-${currentTime.getDay()} ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
         console.log("DATETIME: " + dateTime);
         console.log("Logging transaction with " + awardAmount + " awards and description of: \n" + description + "\n on " + dateTime);
         
