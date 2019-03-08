@@ -9,7 +9,7 @@ export class CatalogService {
 
   constructor(private http: HttpClient) { }
 
-  getCatalogOwners(){
+  getCatalogOwners(): Observable<object>{
     return this.http.get('catalogs.php?getOwners=true');
   }
 

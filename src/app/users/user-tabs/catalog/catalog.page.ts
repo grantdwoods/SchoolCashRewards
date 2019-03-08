@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { CatalogService } from '../../../services/catalog.service';
 import { Observable } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-catalog',
@@ -15,29 +16,50 @@ export class CatalogPage implements OnInit {
     this.userID = this.authService.getUserID();
   }
 
-  private catalogOwners :Observable<object>;
+  private catalogOwners$ :Observable<object>;
   private hasCatalog :boolean = false;
   private selectedUser:string;
-  private catalogItems: Observable<object>;
+  private catalogItems$: Observable<object>;
   private userID: string;
+  private role: string;
+  private editStandard: boolean;
 
   ngOnInit() {
     console.log("CATALOG-ON INIT");
 
-    this.catalogOwners = this.catalogService.getCatalogOwners();
+    this.catalogOwners$ = this.catalogService.getCatalogOwners();
+    this.role = this.authService.getRole();
 
-    this.catalogOwners.subscribe((data) => {
+    this.catalogOwners$.subscribe((data) => {
       console.log(data);
-      Object.keys(data).map(key => {
-        if(data[key]['strTeacherID'] == this.userID){
+      var stdKey;
+      Object.keys(data).map(index => {
+        let id = data[index]['strTeacherID'];
+        if(id == this.userID){
           this.hasCatalog = true;
-          this.catalogItems = this.catalogService.getCatalog(this.userID);
-          this.selectedUser = this.userID;
+        }
+        if(id.startsWith("STD")){
+          stdKey = index;
         }
       });
+
+      if(this.hasCatalog){
+        this.changeCatalogWithID(this.userID);
+      }
+      else{
+        this.changeCatalogWithID(data[stdKey]['strTeacherID']);
+      }
     });
   }
-  
+
+  isOnStandard(){
+    if(!isNullOrUndefined(this.selectedUser))
+    return this.selectedUser.startsWith("STD");
+  }
+
+  toggleEditStandard(){
+    this.editStandard = true;
+  }
   ionViewDidEnter(){
     console.log("CATALOG-DID ENTER");
   }
@@ -50,16 +72,11 @@ export class CatalogPage implements OnInit {
     console.log("CATALOG-Change event fired");
     console.log(this.selectedUser);
     if(this.selectedUser){
-      this.catalogItems = this.catalogService.getCatalog(this.selectedUser);
+      this.catalogItems$ = this.catalogService.getCatalog(this.selectedUser);
     }
   }
-}
-
-export interface CatalogItem{
-  intSchoolID:number,
-  intItemID: number,
-  intCost: number,
-  strDescription:string,
-  strImageLocation:string,
-  strTeacherID: string
+  changeCatalogWithID(userID:string){
+    this.catalogItems$ = this.catalogService.getCatalog(userID);
+    this.selectedUser = userID;
+  }
 }
