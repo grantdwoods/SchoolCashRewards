@@ -11,8 +11,9 @@
     "\\src\\app\\users\\user-tabs",
     "\\src\\app\\users\\user-tabs\\student",
     "\\src\\app\\users\\user-tabs\\student\\student-info",
-    "\\src\\app\\users\\user-tabs\\student\\student-info\\award-modal"
+    "\\src\\app\\users\\user-tabs\\student\\student-info\\award-modal",
+    "\\src\\app\\users\\user-tabs\\student\\student-info\\history-component"
   ],
-  "SelectedNode": "\\src\\app\\services\\class.service.ts",
+  "SelectedNode": "\\src\\app\\users\\user-tabs\\student\\student-info\\award-modal\\award-modal.page.html",
   "PreviewInSolutionExplorer": false
 }
