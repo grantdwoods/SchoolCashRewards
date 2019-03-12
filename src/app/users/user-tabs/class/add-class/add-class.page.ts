@@ -3,6 +3,7 @@ import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { Router } from '@angular/router';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-add-class',
@@ -12,11 +13,13 @@ import { Router } from '@angular/router';
 export class AddClassPage implements OnInit {
 
   className: string = "";
-  classID: string;
-  studentArray: Array<object> = [];
+  classID: string = "";
+  studentArray: any = []; //Array<object> = [];
   userID: string = "";
   firstName: string = "";
   lastName: string = "";
+  hasClass: boolean = false;
+
   constructor(
     private studentService: StudentService, 
     private classService: ClassService,
@@ -24,14 +27,36 @@ export class AddClassPage implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    let data1 = await this.classService.getClassForTeacher().toPromise();
+    if(!isNullOrUndefined(data1)) 
+    {
+      this.classID = data1[0]['intClassID'];
+
+      let data3 = await this.classService.getClassByID(parseInt(this.classID)).toPromise();
+      if(!isNullOrUndefined(data3))
+      {
+        this.className = data3[0]['strClassName'];
+        this.hasClass = true;
+        console.log(data3);
+        console.log(this.classID);
+      }
+      
+      let data2 = await this.classService.getStudentsInClass(parseInt(this.classID)).toPromise();
+      if(!isNullOrUndefined(data2)) 
+      {
+        console.log(data2);
+        this.studentArray = data2;
+      }
+    }
+
   }
 
   onClickAddStudents(userID: string, firstName: string, lastName: string)
   {
     if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "")
     {
-      this.studentArray.push({userID: userID, firstName: firstName, lastName: lastName});
+      this.studentArray.push({strStudentID: userID, strFirstName: firstName, strLastName: lastName});
       this.userID = "";
       this.firstName = "";
       this.lastName = "";
@@ -57,17 +82,22 @@ export class AddClassPage implements OnInit {
     {
       try
       {
-        await this.classService.postNewClass(this.className).toPromise();
-        console.log('Class Posted');
-        let data1 = await this.classService.getClassForTeacher().toPromise();
-        console.log(data1['classID']);
-        this.classID = data1['classID'];
-        await this.classService.postNewTeaches(this.classID).toPromise();
+        if(!this.hasClass) 
+        {
+          let id = await this.classService.postNewClass(this.className).toPromise();
+          this.classID = id['entry'];
+          let data1 = await this.classService.postNewTeaches(this.classID).toPromise();
+          console.log('checkpoint 1');
+        }
+        
+        console.log(this.classID);
 
         for(let student of this.studentArray)
         {
-          await this.studentService.postStudentInfo(student['userID'], student['firstName'], student['lastName']).toPromise();
-          await this.classService.postNewTakes(this.classID, student['userID']).toPromise();
+          let data2 = await this.studentService.postStudentInfo(student['strStudentID'], student['strFirstName'], student['strLastName']).toPromise();
+          console.log('checkpoint 2');
+          let data3 = await this.classService.postNewTakes(this.classID, student['strStudentID']).toPromise();
+          console.log('checkpoint 3');
         }
 
         this.router.navigateByUrl('/user-tabs/class')
@@ -75,6 +105,8 @@ export class AddClassPage implements OnInit {
       catch(error)
       {
         console.log(error);
+        this.authService.presentToastPos('Class could not be saved', 'bottom', 'danger');
+        this.router.navigateByUrl('/user-tabs/class');
       }
     }
     else

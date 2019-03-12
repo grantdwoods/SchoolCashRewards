@@ -7,18 +7,16 @@
             </ion-label>
         </ion-item>
         <app-show-class *ngIf="hasClass"></app-show-class>
-        <ion-item-group *ngIf="!hasClass">
-            <ion-item lines="none">
-                <ion-label>
-                    It appears this teacher is not associated with a class. Click the add class button to add a class!
-                </ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-button (click)="addClass()">
-                    Add Class
-                </ion-button>
-            </ion-item>
-        </ion-item-group>
+        <ion-item *ngIf="!hasClass" lines="none">
+            <ion-label>
+                It appears this teacher is not associated with a class. Click the add class button to add a class!
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-button (click)="addClass()">
+                Edit Class
+            </ion-button>
+        </ion-item>
     </ion-item-group>
     <ion-item-group *ngIf="role=='s'">
         <ion-item>

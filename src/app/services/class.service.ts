@@ -54,4 +54,10 @@ export class ClassService {
     console.log("Posted new takes with classID=" + classID + " and userID=" + userID);
   }
 
+  putClassAwards(classID: number, awardAmount: number)
+  {
+    let body = `{"classID":"${classID}", "coupons":"${awardAmount}"}`;
+    return this.http.put('classes.php', body, {});
+  }
+
 }
