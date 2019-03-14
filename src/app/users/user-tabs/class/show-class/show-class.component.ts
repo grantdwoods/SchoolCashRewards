@@ -3,6 +3,7 @@ import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-show-class',
@@ -19,7 +20,7 @@ export class ShowClassComponent implements OnInit {
     private toastController: ToastController
   ) { }
 
-  students$: any = [];
+  students$: Observable<object>;
   classID$: number;
   className$: string;
   classCoupons$: number;
@@ -32,10 +33,7 @@ export class ShowClassComponent implements OnInit {
     this.className$ = data2[0]['strClassName'];
     this.classCoupons$ = data2[0]['intClassCoupons'];
 
-    let data3 = await this.classService.getStudentsInClass(this.classID$).toPromise();
-    this.students$ = data3;
-    
-    console.log(data3);
+    this.students$ = this.classService.getStudentsInClass(this.classID$);
   }
 
   routeToStudent(strStudentID: string)
@@ -114,10 +112,12 @@ export class ShowClassComponent implements OnInit {
     this.displayToast("Awarding " + award + " awards to " + this.className$, "");
   }//end handleAward
 
-  private updateBalance(award: number)
+  private async updateBalance(award: number)
   {
     //makes a database request to update this student's award count
-    let data1 = this.classService.putClassAwards(this.classID$, award).toPromise();
+    let data1 = await this.classService.putClassAwards(this.classID$, award).toPromise();
+    let data2 = await this.classService.getClassByID(this.classID$).toPromise();
+    this.classCoupons$ = data2[0]['intClassCoupons'];
     console.log("Processed award. Current balance is: " + this.classCoupons$);
   }//end updateBalance
 

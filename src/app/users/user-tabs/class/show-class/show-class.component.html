@@ -3,7 +3,7 @@
   Class coupons: {{ classCoupons$ }}
   <ion-button (click)="editClassCoupons()">Edit</ion-button>
 </ion-list-header>
-<ion-list *ngFor="let student of students$">
+<ion-list *ngFor="let student of (students$ | async)">
   <ion-item (click)="routeToStudent(student.strStudentID)" lines="none">
     {{ student.strFirstName }} {{ student.strLastName }}
   </ion-item>

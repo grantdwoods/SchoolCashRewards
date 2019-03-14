@@ -1,16 +1,15 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { Router } from '@angular/router';
-import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'app-add-class',
-  templateUrl: './add-class.page.html',
-  styleUrls: ['./add-class.page.scss'],
+  selector: 'app-edit-class',
+  templateUrl: './edit-class.component.html',
+  styleUrls: ['./edit-class.component.scss'],
 })
-export class AddClassPage implements OnInit {
+export class EditClassComponent implements OnInit {
 
   className: string = "";
   classID: string = "";
@@ -18,7 +17,7 @@ export class AddClassPage implements OnInit {
   userID: string = "";
   firstName: string = "";
   lastName: string = "";
-  hasClass: boolean = false;
+  hasClass: boolean = true;
 
   constructor(
     private studentService: StudentService, 
@@ -28,26 +27,24 @@ export class AddClassPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    let data1 = await this.classService.getClassForTeacher().toPromise();
-    if(!isNullOrUndefined(data1)) 
+    try
     {
+      let data1 = await this.classService.getClassForTeacher().toPromise();
       this.classID = data1[0]['intClassID'];
 
       let data3 = await this.classService.getClassByID(parseInt(this.classID)).toPromise();
-      if(!isNullOrUndefined(data3))
-      {
-        this.className = data3[0]['strClassName'];
-        this.hasClass = true;
-        console.log(data3);
-        console.log(this.classID);
-      }
+      this.className = data3[0]['strClassName'];
+      this.hasClass = true;
+      console.log(data3);
+      console.log(this.classID);
       
       let data2 = await this.classService.getStudentsInClass(parseInt(this.classID)).toPromise();
-      if(!isNullOrUndefined(data2)) 
-      {
-        console.log(data2);
-        this.studentArray = data2;
-      }
+      console.log(data2);
+      this.studentArray = data2;
+    }
+    catch(error)
+    {
+      console.log(error);
     }
 
   }

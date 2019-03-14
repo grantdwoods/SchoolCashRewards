@@ -24,6 +24,11 @@ export class ClassService {
     return this.http.get("classes.php?classID=" + classID);
   }
 
+  getClassByStudentID(studentID: string)
+  {
+    return this.http.get("classes.php?studentID=" + studentID);
+  }
+
   getClassForTeacher()
   {
     return this.http.get("teaches.php");
