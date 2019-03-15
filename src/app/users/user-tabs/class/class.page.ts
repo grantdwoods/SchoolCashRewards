@@ -16,44 +16,18 @@ export class ClassPage implements OnInit {
   class$: object;
   students$: object;
   hasClass: boolean;
-  constructor(private authService: AuthenticationService,
-     private classService: ClassService,
-     private router: Router
+
+  constructor(
+    private authService: AuthenticationService,
+    private classService: ClassService,
+    private router: Router
   ) { }
 
-  async ngOnInit() {
-    this.role = this.authService.getRole();
-    
-    this.role = this.authService.getRole();
-    try
-    {
-      var data = await this.classService.getClassForTeacher().toPromise()
-      this.classID$ = data[0]['intClassID'];
-    }
-    catch(error)
-    {
-      if(error['status'] == 404)
-        console.log('Teacher has no class');
-      else
-        console.log('Unknown error');
-    }
-
-    if(isNullOrUndefined(this.classID$))
-    {
-      this.hasClass = false;
-    }
-    else
-      this.hasClass = true;
-    //this.classService.getClassByID(this.classID$['intClassID']).subscribe(_class => (this.class$ = _class));
+  ngOnInit() {
     
   }
 
   logout(){
     this.authService.logout();
-  }
-
-  addClass()
-  {
-    this.router.navigateByUrl('add-class');
   }
 }
