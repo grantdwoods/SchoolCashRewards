@@ -4,7 +4,9 @@
 <ion-list>
     <ion-item *ngFor="let history of (historyInfo | async)" (click)="openModalView(history)">
         <p>
-            {{history.dtmDate}}
+            {{this.extractMonth(history.dtmDate)}}
+            <br />
+            {{this.extractDate(history.dtmDate)}}
         </p>
         <p>
             <!--this should somehow be replaced with the teacher's name rather than ID-->
@@ -12,7 +14,7 @@
             <br />
             {{history.strComment}}
         </p>
-        <p>
+        <p align="right">
             {{history.intAmount}}
         </p>
     </ion-item>
