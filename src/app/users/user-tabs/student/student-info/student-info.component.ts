@@ -35,19 +35,6 @@ export class StudentInfoComponent implements OnInit {
         });
     }//end ngOnInit
 
-    async awardCoupons()
-    {
-        const modal = await this.modalController.create({
-            component: AwardModalPage,
-            componentProps: {currentCoupons: this.studentInfo[0].intCoupons}
-        });
-        console.log("Awarding coupons to " + this.studentInfo[0].strFirstName + " " + this.studentInfo[0].strLastName +" ("+this.studentInfo[0].intCoupons+")");
-        return await modal.present();
-
-        //refresh the page to show that the student has the transaction applied
-
-    }//end awardCoupons
-
     async awardCouponsWithAlert()
     {
         //creates an alert window that handles the awarding of coupons
