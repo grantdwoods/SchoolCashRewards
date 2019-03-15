@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { Router } from '@angular/router';
@@ -25,7 +24,6 @@ export class EditClassComponent implements OnInit {
   hasClass: boolean = true;
 
   constructor(
-    private studentService: StudentService, 
     private classService: ClassService,
     private authService: AuthenticationService,
     private regService: RegistrationService,
@@ -39,14 +37,10 @@ export class EditClassComponent implements OnInit {
       let data1 = await this.classService.getClassForTeacher().toPromise();
       this.classID = data1[0]['intClassID'];
 
-      let data3 = await this.classService.getClassByID(parseInt(this.classID)).toPromise();
-      this.className = data3[0]['strClassName'];
-      this.classNameStart = data3[0]['strClassName'];
       this.hasClass = true;
-      console.log(data3);
-      console.log(this.classID);
       
-      this.refreshStudents();
+      await this.refreshClassInfo();
+      await this.refreshStudents();
     }
     catch(error)
     {
@@ -59,7 +53,7 @@ export class EditClassComponent implements OnInit {
   {
     if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "")
     {
-      this.studentArray.push({strStudentID: userID, strFirstName: firstName, strLastName: lastName});
+      // this.studentArray.push({strStudentID: userID, strFirstName: firstName, strLastName: lastName});
       await this.addAlert(userID, firstName, lastName);
       this.userID = "";
       this.firstName = "";
@@ -79,7 +73,13 @@ export class EditClassComponent implements OnInit {
   {
     let data = await this.classService.getStudentsInClass(parseInt(this.classID)).toPromise();
     this.studentArray = data;
-    console.log(data);
+  }
+
+  async refreshClassInfo()
+  {
+    let data3 = await this.classService.getClassByID(parseInt(this.classID)).toPromise();
+    this.className = data3[0]['strClassName'];
+    this.classNameStart = data3[0]['strClassName'];
   }
 
   async onClickRemoveStudent(strStudentID: string)
@@ -88,10 +88,17 @@ export class EditClassComponent implements OnInit {
     this.deleteAlert(strStudentID);
   }
 
-  onClickSaveClass()
+  async onClickSaveClass()
   {
-    console.log(this.classNameStart + " => " + this.className);
-    // this.router.navigateByUrl('/users/user-tabs/class');
+    // console.log(this.classNameStart + " => " + this.className);
+
+    if(this.classNameStart != this.className)
+    {
+      await this.classService.putClassName(this.classID, this.className).toPromise();
+      console.log('Changing class name');
+    }
+
+    this.router.navigateByUrl('/users/user-tabs/class');
   }
 
   async deleteAlert(strStudentID: string) {

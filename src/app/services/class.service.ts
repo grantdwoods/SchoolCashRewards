@@ -65,6 +65,12 @@ export class ClassService {
     return this.http.put('classes.php', body, {});
   }
 
+  putClassName(classID: string, className: string)
+  {
+    let body = `{"classID":"${classID}", "className":"${className}"}`;
+    return this.http.put('classes.php', body);
+  }
+
   removeStudentFromClass(studentID: string)
   {
     return this.http.delete('takes.php?userID=' + studentID);
