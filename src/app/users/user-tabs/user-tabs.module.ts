@@ -11,7 +11,8 @@ const routes: Routes = [
   {path: '',component: UserTabsPage, children: [
     { path: 'class', loadChildren: './class/class.module#ClassPageModule' },
     { path: 'catalog', loadChildren: './catalog/catalog.module#CatalogPageModule' },
-    { path: 'student', loadChildren: './student/student.module#StudentPageModule' }
+    { path: 'student', loadChildren: './student/student.module#StudentPageModule' },
+    { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' }
   ]},
   {path: '', redirectTo:'user-tabs/class', pathMatch:'full'}
 

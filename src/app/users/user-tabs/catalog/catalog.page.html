@@ -3,14 +3,20 @@
     <ion-item>
         <ion-label>Catalogs</ion-label>
         <ion-select interface="alert" [value]="selectedUser" [(ngModel)]="selectedUser" (ionChange) = changeCatalog()>
-            <ion-select-option  *ngFor = 'let catalogOwner of (catalogOwners | async)' value={{catalogOwner.strTeacherID}}>
+            <ion-select-option  *ngFor = 'let catalogOwner of (catalogOwners$ | async)' value={{catalogOwner.strTeacherID}}>
                 {{catalogOwner.strFirstName}} {{catalogOwner.strLastName}}</ion-select-option>
         </ion-select>
-      </ion-item>
-      <ion-item *ngIf="!hasCatalog">You do not have a catalog set up.</ion-item>
-      <ion-grid>
-          <ion-row>
-              <ion-col *ngFor="let item of (catalogItems | async)">
+        </ion-item>
+        
+        <ion-item *ngIf="!hasCatalog" lines="none">You do not have a catalog set up.<a (click)="startCatalog()">Start one.</a></ion-item>
+        <ion-item #stdItem lines="none">
+            <ion-button slot="start" *ngIf="editCatalog" (click) ="presentAlert()">Add Item</ion-button>
+            <ion-button slot="end" *ngIf="role == 'a' && isOnStandard()" (click)="toggleEdit()">{{editButtonText}}</ion-button>
+            <ion-button slot="end" *ngIf="userID == selectedUser" (click)="toggleEdit()">{{editButtonText}}</ion-button>
+        </ion-item>
+        <ion-grid>
+            <ion-row>
+                <ion-col *ngFor="let item of (catalogItems$ | async)">
                     <ion-card>
                         <ion-card-header>
                             <ion-card-subtitle>{{item['strDescription']}}</ion-card-subtitle>
@@ -21,9 +27,10 @@
                                     </ion-img>
                                 </ion-thumbnail>
                             {{item['intCost']}} <ion-icon name="cash"></ion-icon>
-                            <div *ngIf="item['strTeacherID'] == userID">
-                                    <ion-button color="primary" size="small">Edit</ion-button>
-                                    <ion-button color="danger" size="small">Remove</ion-button>
+                            <div *ngIf="editCatalog">    
+                                <ion-button color="primary" size="small" 
+                                    *ngIf="item['strTeacherID'] == userID || isOnStandard() && role == 'a' && editCatalog ">Edit</ion-button>
+                                <ion-button color="danger" size="small" (click)="removeCatalogItem(item['intItemID'], item['strTeacherID'])">Remove</ion-button>
                             </div>
                         </ion-card-content>
                     </ion-card>

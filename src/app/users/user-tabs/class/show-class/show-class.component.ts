@@ -3,6 +3,7 @@ import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-show-class',
@@ -19,7 +20,7 @@ export class ShowClassComponent implements OnInit {
     private toastController: ToastController
   ) { }
 
-  students$: any;
+  students$: Observable<object>;
   classID$: number;
   className$: string;
   classCoupons$: number;
@@ -32,10 +33,7 @@ export class ShowClassComponent implements OnInit {
     this.className$ = data2[0]['strClassName'];
     this.classCoupons$ = data2[0]['intClassCoupons'];
 
-    let data3 = await this.classService.getStudentsInClass(this.classID$).toPromise();
-    this.students$ = data3;
-    console.log(data3);
-    console.log(data3[0]);
+    this.students$ = this.classService.getStudentsInClass(this.classID$);
   }
 
   routeToStudent(strStudentID: string)
@@ -47,56 +45,56 @@ export class ShowClassComponent implements OnInit {
   {
     //creates an alert window that handles the awarding of coupons
     const alert = await this.alertController.create({
-        header: 'Add/Remove Class Cares',
-        backdropDismiss: false,
-        inputs: [
-            {
-                name: 'caresAmount',
-                id: 'num-award',
-                type: 'number',
-                value: 0,
-                min: -100,
-                max: 100
-            },
-            {
-                name: 'caresDescription',
-                id: 'txt_desc',
-                type: 'text',
-                placeholder: 'Description (optional)',
-                value: "",
-                //a max length does not exist as far as I know
-            }
-        ],
+      header: 'Edit coupons',
+      backdropDismiss: false,
+      inputs: [
+        {
+            name: 'awardAmount',
+            id: 'num-award',
+            type: 'number',
+            value: 0,
+            min: -10000,
+            max: 10000
+        },
+        {
+            name: 'awardDescription',
+            id: 'txt_desc',
+            type: 'text',
+            placeholder: 'Description (optional)',
+            value: "",
+            //a max length does not exist as far as I know
+        }
+      ],
         buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Add/remove coupons',
+          handler: data => {
+            //check if the user didn't enter a number.
+            //Note: the 0 on alert startup is NaN for some reason
+            if (isNaN(parseInt(data.awardAmount)))
             {
-                text: 'Cancel',
-                role: 'cancel',
-                cssClass: 'secondary'
-            },
-            {
-                text: 'Change',
-                handler: data => {
-                    //check if the user didn't enter a number.
-                    //Note: the 0 on alert startup is NaN for some reason
-                    if (isNaN(parseInt(data.caresAmount)))
-                    {
-                        this.displayToast("Error: Invalid Award Amount", "danger");
-                        console.log("undefined award count");
-                        return false; //this prevents the alert from closing
-                    }
-                    //check if the balance will be < 0. If so, alert the user
-                    else if (this.classCoupons$ + parseInt(data.caresAmount) < 0) {
-                        this.displayToast("Error: Class would have negative cares!", "danger");
-                        console.log("negative balance");
-                        return false;
-                    }
-                    //everything should check out. process the stuff
-                    else {
-                        this.handleAward(parseInt(data.caresAmount), data.description);
-                    }
-                }
+              this.displayToast("Error: Invalid Award Amount", "danger");
+              console.log("undefined award count");
+              return false; //this prevents the alert from closing
             }
-        ],
+            //check if the balance will be < 0. If so, alert the user
+            else if (this.classCoupons$ + parseInt(data.awardAmount) < 0) {
+              this.displayToast("Error: Class would have negative awards!", "danger");
+              console.log("negative balance");
+              return false;
+            }
+            //everything should check out. process the stuff
+            else {
+              this.handleAward(parseInt(data.awardAmount), data.awardDescription);
+            }
+          }
+        }
+      ],
     });//end alert creation
     await alert.present();
     //refresh the page when the alert is dismissed
@@ -108,12 +106,20 @@ export class ShowClassComponent implements OnInit {
 
   private handleAward(award: number, description: string)
   {
-    var balance = this.classCoupons$ + award;
-    let className = this.className$;
-    this.displayToast("Awarding " + balance + " awards to " + className, "");
-    console.log("processing award: " + balance);
-    //refresh page to show transaction has occured
+    //update the student's coupon count
+    this.updateBalance(award);
+    //toast
+    this.displayToast("Awarding " + award + " awards to " + this.className$, "");
   }//end handleAward
+
+  private async updateBalance(award: number)
+  {
+    //makes a database request to update this student's award count
+    let data1 = await this.classService.putClassAwards(this.classID$, award).toPromise();
+    let data2 = await this.classService.getClassByID(this.classID$).toPromise();
+    this.classCoupons$ = data2[0]['intClassCoupons'];
+    console.log("Processed award. Current balance is: " + this.classCoupons$);
+  }//end updateBalance
 
   private async displayToast(toastText: string, color: string)
   {

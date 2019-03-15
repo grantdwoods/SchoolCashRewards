@@ -7,7 +7,7 @@ import { Storage } from '@ionic/Storage'
 })
 export class StudentService {
 
-    constructor(private httpClient: HttpClient, private storage: Storage) { }
+  constructor(private httpClient: HttpClient, private storage: Storage) { }
 
   getStudentInfo(userID: string)
   {

@@ -1,4 +1,3 @@
-<app-main-header [title]="'Add Class'"></app-main-header>
 <ion-content padding>
   <ion-item-group>
     <ion-item lines="none">
@@ -10,8 +9,14 @@
     <ion-item lines="none">
       <ion-label>User ID:</ion-label><ion-input [(ngModel)]='userID'></ion-input>
     </ion-item>
+    <ion-item lines="none">
+      <ion-label>Password:</ion-label><ion-input [(ngModel)]='password'></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Keep password field: </ion-label><ion-checkbox [(ngModel)]='savePassword'></ion-checkbox>
+    </ion-item>
     <ion-item-divider lines="none">
-      <ion-button (click)="onClickAddStudents(userID, firstName, lastName)">Add Student</ion-button>
+      <ion-button (click)="onClickAddStudents(userID, firstName, lastName)" color="secondary">Add Student</ion-button>
     </ion-item-divider>
   </ion-item-group>
 
@@ -26,12 +31,12 @@
 
   <ion-item-group *ngFor="let student of studentArray">
     <ion-item lines="none">
-      <ion-label>{{ student.firstName }} {{student.lastName}}</ion-label>
+      <ion-label>{{ student.strFirstName }} {{ student.strLastName }}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-button (click)="onClickRemoveStudent(student)" color="danger">Remove Student</ion-button>
+      <ion-button (click)="onClickRemoveStudent(student.strStudentID)" color="danger">Remove Student</ion-button>
     </ion-item>
   </ion-item-group>
 
-  <ion-button (click)="onClickRegisterClass()" expand="full" color="success">Register Class</ion-button>
+  <ion-button (click)="onClickSaveClass()" expand="full" color="primary">Save Class</ion-button>
 </ion-content>

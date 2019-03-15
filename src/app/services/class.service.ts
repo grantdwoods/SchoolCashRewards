@@ -24,6 +24,11 @@ export class ClassService {
     return this.http.get("classes.php?classID=" + classID);
   }
 
+  getClassByStudentID(studentID: string)
+  {
+    return this.http.get("classes.php?studentID=" + studentID);
+  }
+
   getClassForTeacher()
   {
     return this.http.get("teaches.php");
@@ -52,6 +57,17 @@ export class ClassService {
     return this.http.post("takes.php", form);
 
     console.log("Posted new takes with classID=" + classID + " and userID=" + userID);
+  }
+
+  putClassAwards(classID: number, awardAmount: number)
+  {
+    let body = `{"classID":"${classID}", "coupons":"${awardAmount}"}`;
+    return this.http.put('classes.php', body, {});
+  }
+
+  removeStudentFromClass(studentID: string)
+  {
+    return this.http.delete('takes.php?userID=' + studentID);
   }
 
 }
