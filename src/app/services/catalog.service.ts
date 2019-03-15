@@ -18,7 +18,7 @@ export class CatalogService {
   }
 
   postNewCatalogItem(userID:string, cost:number, description:string): Observable<object>{
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("userID", userID);
     formData.append("cost", cost.toString());
     formData.append("description", description);
@@ -26,11 +26,14 @@ export class CatalogService {
     return this.http.post(`catalogs.php`,formData);
   }
 
-  postNewCatalogRemove(){
-
+  postNewCatalogRemove(itemID:number, userID:string){
+    let formData = new FormData();
+    formData.append("itemID",itemID.toString());
+    formData.append("userID", userID);
+    return this.http.post(`catalogremoves.php`,formData);
   }
 
-  deleteFromCatalog(){
-    
+  deleteFromCatalog(itemID:number, userID:string){
+    return this.http.delete(`catalogs.php?itemID=${itemID}&userID=${userID}`);
   }
 }

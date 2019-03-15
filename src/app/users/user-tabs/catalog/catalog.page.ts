@@ -119,10 +119,12 @@ export class CatalogPage implements OnInit {
       .subscribe(() => this.changeCatalog());
   }
 
-  removeCatalogItem(itemID:number){
+  removeCatalogItem(itemID:number, itemOwner:string){
     console.log(itemID);
-    if(this.selectedUser == this.userID || this.role == 'a' && this.isOnStandard()){
-      this.catalogService.deleteFromCatalog();
+    if(itemOwner == this.userID || this.role == 'a' && this.isOnStandard()){
+      this.catalogService.deleteFromCatalog(itemID, itemOwner).subscribe(()=> this.changeCatalog());
+    }else{
+      this.catalogService.postNewCatalogRemove(itemID, this.userID);
     }
   }
 }

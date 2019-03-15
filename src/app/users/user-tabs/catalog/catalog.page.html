@@ -30,7 +30,7 @@
                             <div *ngIf="editCatalog">    
                                 <ion-button color="primary" size="small" 
                                     *ngIf="item['strTeacherID'] == userID || isOnStandard() && role == 'a' && editCatalog ">Edit</ion-button>
-                                <ion-button color="danger" size="small" (click)="removeCatalogItem(item['intItemID'])">Remove</ion-button>
+                                <ion-button color="danger" size="small" (click)="removeCatalogItem(item['intItemID'], item['strTeacherID'])">Remove</ion-button>
                             </div>
                         </ion-card-content>
                     </ion-card>
