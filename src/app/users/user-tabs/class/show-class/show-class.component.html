@@ -1,7 +1,7 @@
 <ion-list-header color="light">{{ className$ }}</ion-list-header>
 <ion-list-header>
   Class coupons: {{ classCoupons$ }}
-  <ion-button (click)="editClassCoupons()">Edit</ion-button>
+  <ion-button size="small" (click)="editClassCoupons()">Edit</ion-button>
 </ion-list-header>
 <ion-list *ngFor="let student of (students$ | async)">
   <ion-item (click)="routeToStudent(student.strStudentID)" lines="none">

@@ -25,25 +25,35 @@ export class RegistrationService {
       return this.http.post(this.authService.BASEURL + 'registerUser.php',formData,{});
   }
 
-    registerAccountWithApp(formGroup: FormGroup)
-    {
-        //debugger;
-        var formData = new FormData();
-        formData.append('firstName', formGroup.value['firstName']);
-        formData.append('lastName', formGroup.value['lastName']);
-        return this.http.post('teachers.php', formData, {});
-    }
+  registerAccountWithApp(formGroup: FormGroup)
+  {
+      //debugger;
+      var formData = new FormData();
+      formData.append('firstName', formGroup.value['firstName']);
+      formData.append('lastName', formGroup.value['lastName']);
+      return this.http.post('teachers.php', formData, {});
+  }
 
-  //schoolID is pulled out of JWT in schools.php
-    registerSchoolWithApp(formGroup: FormGroup)
-    {
-        let formData = new FormData();
-        formData.append('schoolName', formGroup.value['schoolName']);
-        formData.append('cashName', formGroup.value['schoolCashName']);
+//schoolID is pulled out of JWT in schools.php
+  registerSchoolWithApp(formGroup: FormGroup)
+  {
+      let formData = new FormData();
+      formData.append('schoolName', formGroup.value['schoolName']);
+      formData.append('cashName', formGroup.value['schoolCashName']);
 
-        return this.http.post('schools.php', formData, {});
-    }
-  
+      return this.http.post('schools.php', formData, {});
+  }
+
+  registerStudent(userID: string, password: string, classID: string)
+  {
+    let formData = new FormData();
+    formData.append('userID', userID);
+    formData.append('password', password);
+    formData.append('classID', classID);
+
+    return this.http.post(this.authService.BASEURL + 'registerUser.php', formData);
+  }
+
   checkForExistingSchool(schoolCode:number){
     return this.http.get(this.authService.BASEURL + 'registerUser.php?schoolID=' + schoolCode);
   }

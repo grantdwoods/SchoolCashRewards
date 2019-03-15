@@ -3,6 +3,8 @@ import { StudentService } from '../../../../services/student.service';
 import { ClassService } from '../../../../services/class.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { RegistrationService } from '../../../../services/registration.service';
 
 @Component({
   selector: 'app-edit-class',
@@ -12,18 +14,23 @@ import { Router } from '@angular/router';
 export class EditClassComponent implements OnInit {
 
   className: string = "";
+  classNameStart: string = "";
   classID: string = "";
   studentArray: any = []; //Array<object> = [];
   userID: string = "";
   firstName: string = "";
   lastName: string = "";
+  password: string = "";
+  savePassword: boolean = false;
   hasClass: boolean = true;
 
   constructor(
     private studentService: StudentService, 
     private classService: ClassService,
     private authService: AuthenticationService,
-    private router: Router
+    private regService: RegistrationService,
+    private router: Router,
+    public alertController: AlertController
   ) { }
 
   async ngOnInit() {
@@ -34,13 +41,12 @@ export class EditClassComponent implements OnInit {
 
       let data3 = await this.classService.getClassByID(parseInt(this.classID)).toPromise();
       this.className = data3[0]['strClassName'];
+      this.classNameStart = data3[0]['strClassName'];
       this.hasClass = true;
       console.log(data3);
       console.log(this.classID);
       
-      let data2 = await this.classService.getStudentsInClass(parseInt(this.classID)).toPromise();
-      console.log(data2);
-      this.studentArray = data2;
+      this.refreshStudents();
     }
     catch(error)
     {
@@ -49,64 +55,107 @@ export class EditClassComponent implements OnInit {
 
   }
 
-  onClickAddStudents(userID: string, firstName: string, lastName: string)
+  async onClickAddStudents(userID: string, firstName: string, lastName: string)
   {
     if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "")
     {
       this.studentArray.push({strStudentID: userID, strFirstName: firstName, strLastName: lastName});
+      await this.addAlert(userID, firstName, lastName);
       this.userID = "";
       this.firstName = "";
       this.lastName = "";
+      
+      if(!this.savePassword)
+      {
+        this.password = "";
+      }
     }
 
     else
       this.authService.presentToastPos('Student must have ID, first, and last name', 'bottom', 'danger');
   }
 
-  onClickRemoveStudent(index: object)
+  async refreshStudents()
   {
-    this.studentArray.splice(this.studentArray.indexOf(index), 1)
+    let data = await this.classService.getStudentsInClass(parseInt(this.classID)).toPromise();
+    this.studentArray = data;
+    console.log(data);
   }
 
-  onClickRegisterClass()
+  async onClickRemoveStudent(strStudentID: string)
   {
-    this.registerClass();
+    console.log(strStudentID)
+    this.deleteAlert(strStudentID);
   }
 
-  async registerClass()
+  onClickSaveClass()
   {
-    if(this.studentArray.length > 0 && this.className.trim() != "")
-    {
-      try
-      {
-        if(!this.hasClass) 
+    console.log(this.classNameStart + " => " + this.className);
+    // this.router.navigateByUrl('/users/user-tabs/class');
+  }
+
+  async deleteAlert(strStudentID: string) {
+    const alert = await this.alertController.create({
+      header: 'Remove Student',
+      subHeader: 'Are you sure?',
+      message: 'Are you sure you want to delete this student from the class?',
+      buttons: [
         {
-          let id = await this.classService.postNewClass(this.className).toPromise();
-          this.classID = id['entry'];
-          let data1 = await this.classService.postNewTeaches(this.classID).toPromise();
-          console.log('checkpoint 1');
-        }
-        
-        console.log(this.classID);
-
-        for(let student of this.studentArray)
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
         {
-          let data2 = await this.studentService.postStudentInfo(student['strStudentID'], student['strFirstName'], student['strLastName']).toPromise();
-          console.log('checkpoint 2');
-          let data3 = await this.classService.postNewTakes(this.classID, student['strStudentID']).toPromise();
-          console.log('checkpoint 3');
+          text: 'Remove',
+          cssClass: 'danger',
+          handler: () =>
+          {
+            this.deleteAlertConfirm(strStudentID);
+          }
         }
+      ]
+    });
 
-        this.router.navigateByUrl('/user-tabs/class')
-      }
-      catch(error)
-      {
-        console.log(error);
-        this.authService.presentToastPos('Class could not be saved', 'bottom', 'danger');
-        this.router.navigateByUrl('/user-tabs/class');
-      }
-    }
-    else
-      this.authService.presentToastPos('Class must have name and at least one student', 'bottom', 'danger');
+    await alert.present();
   }
+
+  async deleteAlertConfirm(userID: string)
+  {
+    await this.classService.removeStudentFromClass(userID).toPromise();
+    await this.refreshStudents();
+  }
+
+  async addAlert(userID: string, firstName: string, lastName: string) {
+    const alert = await this.alertController.create({
+      header: 'Add Student',
+      subHeader: 'Are you sure?',
+      message: 'Are you sure you want to add this student to the class?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Add',
+          handler: (index) =>
+          {
+            this.addAlertConfirm(userID, firstName, lastName);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async addAlertConfirm(userID: string, firstName: string, lastName: string)
+  {
+    // Register the student here
+    await this.regService.registerStudent(userID, this.password, this.classID).toPromise();
+    // await this.studentService.postStudentInfo(userID, firstName, lastName).toPromise();
+    // await this.classService.postNewTakes(this.classID, userID).toPromise();
+    await this.refreshStudents();
+  }
+
 }

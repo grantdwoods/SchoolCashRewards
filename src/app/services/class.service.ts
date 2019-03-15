@@ -65,4 +65,9 @@ export class ClassService {
     return this.http.put('classes.php', body, {});
   }
 
+  removeStudentFromClass(studentID: string)
+  {
+    return this.http.delete('takes.php?userID=' + studentID);
+  }
+
 }

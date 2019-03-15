@@ -12,6 +12,8 @@ import { AddClassComponent } from './add-class/add-class.component';
 import { EditClassComponent } from './edit-class/edit-class.component';
 import { EntryViewComponent } from './entry-view/entry-view.component';
 import { ShowStudentComponent } from './show-student/show-student.component';
+import { AdminRemoveTeacherComponent } from './admin-remove-teacher/admin-remove-teacher.component';
+import { AdminRemoveStudentComponent } from './admin-remove-student/admin-remove-student.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,14 @@ const routes: Routes = [
       {
         path: 'entry-view',
         component: EntryViewComponent
+      },
+      {
+        path: 'admin-remove-teacher',
+        component: AdminRemoveTeacherComponent
+      },
+      {
+        path: 'admin-remove-student',
+        component: AdminRemoveStudentComponent
       }
     ]
   },
@@ -51,6 +61,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedComponentsModule,
   ],
-  declarations: [ClassPage, ShowClassComponent, AddClassComponent, EditClassComponent, EntryViewComponent, ShowStudentComponent]
+  declarations: [ClassPage, ShowClassComponent, AddClassComponent, EditClassComponent, EntryViewComponent, ShowStudentComponent, AdminRemoveTeacherComponent, AdminRemoveStudentComponent]
 })
 export class ClassPageModule {}
