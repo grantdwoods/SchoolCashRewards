@@ -7,9 +7,12 @@
                 {{catalogOwner.strFirstName}} {{catalogOwner.strLastName}}</ion-select-option>
         </ion-select>
         </ion-item>
-        <ion-item *ngIf="!hasCatalog">You do not have a catalog set up.</ion-item> 
+        
+        <ion-item *ngIf="!hasCatalog" lines="none">You do not have a catalog set up.<a (click)="startCatalog()">Start one.</a></ion-item>
         <ion-item #stdItem lines="none">
-            <ion-button slot="end" *ngIf="role == 'a' && isOnStandard()" (click)="toggleEditStandard()">Edit Standard Catalog</ion-button>
+            <ion-button slot="start" *ngIf="editCatalog" (click) ="presentAlert()">Add Item</ion-button>
+            <ion-button slot="end" *ngIf="role == 'a' && isOnStandard()" (click)="toggleEdit()">{{editButtonText}}</ion-button>
+            <ion-button slot="end" *ngIf="userID == selectedUser" (click)="toggleEdit()">{{editButtonText}}</ion-button>
         </ion-item>
         <ion-grid>
             <ion-row>
@@ -24,9 +27,10 @@
                                     </ion-img>
                                 </ion-thumbnail>
                             {{item['intCost']}} <ion-icon name="cash"></ion-icon>
-                            <div *ngIf="item['strTeacherID'] == userID || isOnStandard() && editStandard ">
-                                    <ion-button color="primary" size="small">Edit</ion-button>
-                                    <ion-button color="danger" size="small">Remove</ion-button>
+                            <div *ngIf="editCatalog">    
+                                <ion-button color="primary" size="small" 
+                                    *ngIf="item['strTeacherID'] == userID || isOnStandard() && role == 'a' && editCatalog ">Edit</ion-button>
+                                <ion-button color="danger" size="small" (click)="removeCatalogItem(item['intItemID'])">Remove</ion-button>
                             </div>
                         </ion-card-content>
                     </ion-card>
