@@ -13,8 +13,7 @@ export class AwardModalPage implements OnInit{
     date: Date;
 
     ngOnInit() {
-        this.date = new Date(this.history[0]['dtmDate']);//ignore the red squiggly. It pulls the info for some reason despite it.
-        console.log(this.date);
+        this.date = new Date(this.history['dtmDate']);
     }//end ngOnInit
 
     private closeModal()

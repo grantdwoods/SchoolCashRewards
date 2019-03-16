@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { FormGroup } from '@angular/forms';
 
@@ -44,14 +44,15 @@ export class RegistrationService {
       return this.http.post('schools.php', formData, {});
   }
 
-  registerStudent(userID: string, password: string, classID: string)
+  registerStudent(userID: string, password: string)
   {
     let formData = new FormData();
     formData.append('userID', userID);
     formData.append('password', password);
-    formData.append('classID', classID);
 
-    return this.http.post(this.authService.BASEURL + 'registerUser.php', formData);
+    let headers = new HttpHeaders();
+    headers = headers.append('jwt', this.authService.getToken());
+    return this.http.post(this.authService.BASEURL + 'registerUser.php', formData, {headers});
   }
 
   checkForExistingSchool(schoolCode:number){
