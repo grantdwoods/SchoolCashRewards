@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../../../services/authentication.servi
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { RegistrationService } from '../../../../services/registration.service';
+import { StudentService } from '../../../../services/student.service';
 
 @Component({
   selector: 'app-edit-class',
@@ -28,7 +29,8 @@ export class EditClassComponent implements OnInit {
     private authService: AuthenticationService,
     private regService: RegistrationService,
     private router: Router,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private studentService:StudentService
   ) { }
 
   async ngOnInit() {
@@ -49,12 +51,12 @@ export class EditClassComponent implements OnInit {
 
   }
 
-  async onClickAddStudents(userID: string, firstName: string, lastName: string)
+  async onClickAddStudents(userID: string, firstName: string, lastName: string, password: string)
   {
-    if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "")
+    if(userID.trim() != "" && firstName.trim() != "" && lastName.trim() != "" && password.trim() != "")
     {
       // this.studentArray.push({strStudentID: userID, strFirstName: firstName, strLastName: lastName});
-      await this.addAlert(userID, firstName, lastName);
+      await this.addAlert(userID, firstName, lastName, password);
       this.userID = "";
       this.firstName = "";
       this.lastName = "";
@@ -132,7 +134,7 @@ export class EditClassComponent implements OnInit {
     await this.refreshStudents();
   }
 
-  async addAlert(userID: string, firstName: string, lastName: string) {
+  async addAlert(userID: string, firstName: string, lastName: string, password: string) {
     const alert = await this.alertController.create({
       header: 'Add Student',
       subHeader: 'Are you sure?',
@@ -147,7 +149,7 @@ export class EditClassComponent implements OnInit {
           text: 'Add',
           handler: (index) =>
           {
-            this.addAlertConfirm(userID, firstName, lastName);
+            this.addAlertConfirm(userID, firstName, lastName, password);
           }
         }
       ]
@@ -156,12 +158,14 @@ export class EditClassComponent implements OnInit {
     await alert.present();
   }
 
-  async addAlertConfirm(userID: string, firstName: string, lastName: string)
+  async addAlertConfirm(userID: string, firstName: string, lastName: string, password)
   {
     // Register the student here
-    await this.regService.registerStudent(userID, this.password, this.classID).toPromise();
-    // await this.studentService.postStudentInfo(userID, firstName, lastName).toPromise();
-    // await this.classService.postNewTakes(this.classID, userID).toPromise();
+    this.authService.toggleStorageState();
+    await this.regService.registerStudent(userID, password).toPromise();
+    this.authService.toggleStorageState();
+    await this.studentService.postStudentInfo(userID, firstName, lastName).toPromise();
+    await this.classService.postNewTakes(this.classID, userID).toPromise();
     await this.refreshStudents();
   }
 

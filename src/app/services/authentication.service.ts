@@ -16,6 +16,7 @@ export class AuthenticationService
 {
   BASEURL = "http://localhost/SchoolCashRewards_php/sp_auth/";
   authenticationState = new BehaviorSubject(false);
+  
   storageState = new BehaviorSubject(false);
 
   private jwt: string = null;
@@ -38,7 +39,7 @@ export class AuthenticationService
 
     var form = new FormData();
     form.append('userID', username);
-    form.append('passWord', password);
+    form.append('password', password);
     
     try{
       var data = await this.http.post(`${this.BASEURL}log_in.php`,form,{}).toPromise();
@@ -79,6 +80,15 @@ export class AuthenticationService
 
   storageValuesAreSet(): boolean{
     return this.storageState.value;
+  }
+  
+  toggleStorageState(){
+    if(this.storageState.value){
+      this.storageState.next(false);
+    }
+    else{
+      this.storageState.next(true);
+    }
   }
 
   async checkToken(){
