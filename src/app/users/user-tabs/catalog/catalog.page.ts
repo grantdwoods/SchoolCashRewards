@@ -141,6 +141,7 @@ export class CatalogPage implements OnInit {
   }
 
   onAddAlertConfirm(description:string, cost:number){
+    console.log(description);
     this.catalogService.postNewCatalogItem(this.selectedUser, cost, description)
       .subscribe(() => this.changeCatalog());
   }

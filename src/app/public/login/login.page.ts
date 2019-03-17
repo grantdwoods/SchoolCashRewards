@@ -9,8 +9,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class LoginPage implements OnInit {
 
   private showForm: boolean;
-  private username: string = "grant";
-  private password: string = "hello";
+  private username: string;
+  private password: string;
   jwt$: Object;
 
   constructor(private authService: AuthenticationService) { }
