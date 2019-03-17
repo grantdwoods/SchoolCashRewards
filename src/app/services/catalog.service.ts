@@ -36,4 +36,8 @@ export class CatalogService {
   deleteFromCatalog(itemID:number, userID:string){
     return this.http.delete(`catalogs.php?itemID=${itemID}&userID=${userID}`);
   }
+
+  putCatalogItem(json:string){
+    return this.http.put(`catalogs.php`, json);
+  }
 }

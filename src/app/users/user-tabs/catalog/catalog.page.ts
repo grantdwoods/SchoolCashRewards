@@ -98,7 +98,33 @@ export class CatalogPage implements OnInit {
     this.selectedUser = userID;
   }
 
-  async presentAlert(): Promise<void> {
+  async presentEditAlert(itemID:number, description:string, cost:number): Promise<void>{
+    const alert = await this.alertController.create({
+      header:"Edit Item",
+      inputs:[
+        {name:"description", type:"text", id:"itemDescription", placeholder:description},
+        {name:"cost", type:"number", id:"itemCost", placeholder:cost.toString()}
+      ],
+      buttons: [
+        {text:'OK', handler: (alertData) =>{
+          if(alertData.description){description = alertData.description}
+          if(alertData.cost){cost = alertData.cost}
+          this.onEditAlertConfirm(itemID, description, cost);
+        } },
+        {text:'Cancel'}
+      ]
+    });
+
+    await alert.present();
+  }
+  onEditAlertConfirm(itemID: number, description: string, cost: number){
+    let ara = {
+      'itemID':itemID, 
+      'description':description, 
+      'cost':cost};
+    this.catalogService.putCatalogItem(JSON.stringify(ara)).subscribe(() => this.changeCatalog())
+  }
+  async presentAddAlert(): Promise<void> {
     const alert = await this.alertController.create({
       header:"Add Item",
       inputs:[
@@ -106,7 +132,7 @@ export class CatalogPage implements OnInit {
         {name:"cost", type:"number", id:"itemCost", placeholder:"Item Cost"}
       ],
       buttons: [
-        {text:'OK', handler: (alertData) => this.onAlertConfirm(alertData.description, alertData.cost)},
+        {text:'OK', handler: (alertData) => this.onAddAlertConfirm(alertData.description, alertData.cost)},
         {text:'Cancel'}
       ]
     });
@@ -114,7 +140,7 @@ export class CatalogPage implements OnInit {
     await alert.present();
   }
 
-  onAlertConfirm(description:string, cost:number){
+  onAddAlertConfirm(description:string, cost:number){
     this.catalogService.postNewCatalogItem(this.selectedUser, cost, description)
       .subscribe(() => this.changeCatalog());
   }
@@ -124,7 +150,7 @@ export class CatalogPage implements OnInit {
     if(itemOwner == this.userID || this.role == 'a' && this.isOnStandard()){
       this.catalogService.deleteFromCatalog(itemID, itemOwner).subscribe(()=> this.changeCatalog());
     }else{
-      this.catalogService.postNewCatalogRemove(itemID, this.userID);
+      this.catalogService.postNewCatalogRemove(itemID, this.userID).subscribe(() => this.changeCatalog());
     }
   }
 }
