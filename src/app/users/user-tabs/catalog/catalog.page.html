@@ -10,7 +10,7 @@
         
         <ion-item *ngIf="!hasCatalog" lines="none">You do not have a catalog set up.<a (click)="startCatalog()">Start one.</a></ion-item>
         <ion-item #stdItem lines="none">
-            <ion-button slot="start" *ngIf="editCatalog" (click) ="presentAlert()">Add Item</ion-button>
+            <ion-button slot="start" *ngIf="editCatalog" (click) ="presentAddAlert()">Add Item</ion-button>
             <ion-button slot="end" *ngIf="role == 'a' && isOnStandard()" (click)="toggleEdit()">{{editButtonText}}</ion-button>
             <ion-button slot="end" *ngIf="userID == selectedUser" (click)="toggleEdit()">{{editButtonText}}</ion-button>
         </ion-item>
@@ -29,7 +29,9 @@
                             {{item['intCost']}} <ion-icon name="cash"></ion-icon>
                             <div *ngIf="editCatalog">    
                                 <ion-button color="primary" size="small" 
-                                    *ngIf="item['strTeacherID'] == userID || isOnStandard() && role == 'a' && editCatalog ">Edit</ion-button>
+                                    *ngIf="item['strTeacherID'] == userID || isOnStandard() && role == 'a' && editCatalog" 
+                                    (click)="presentEditAlert(item['intItemID'], item['strDescription'], item['intCost'])">Edit
+                                </ion-button>
                                 <ion-button color="danger" size="small" (click)="removeCatalogItem(item['intItemID'], item['strTeacherID'])">Remove</ion-button>
                             </div>
                         </ion-card-content>
