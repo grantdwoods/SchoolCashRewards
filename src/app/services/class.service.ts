@@ -34,6 +34,11 @@ export class ClassService {
     return this.http.get("teaches.php");
   }
 
+  getTeacherInfo(teacherID: string)
+  {
+    return this.http.get("teachers.php?userID=" + teacherID);
+  }
+
   postNewClass(className: string)
   {
     var form = new FormData;
@@ -42,17 +47,17 @@ export class ClassService {
     console.log('Posted class ' + className);
   }
 
-  postNewTeaches(classID: string)
+  postNewTeaches(classID: number)
   {
     var form = new FormData;
-    form.append('classID', classID);
+    form.append('classID', classID.toString());
     return this.http.post('teaches.php?', form);
   }
 
-  postNewTakes(classID: string, userID: string)
+  postNewTakes(classID: number, userID: string)
   {
     var form = new FormData;
-    form.append('classID', classID);
+    form.append('classID', classID.toString());
     form.append('userID', userID);
     return this.http.post("takes.php", form);
 
@@ -65,7 +70,7 @@ export class ClassService {
     return this.http.put('classes.php', body, {});
   }
 
-  putClassName(classID: string, className: string)
+  putClassName(classID: number, className: string)
   {
     let body = `{"classID":"${classID}", "className":"${className}"}`;
     return this.http.put('classes.php', body);
